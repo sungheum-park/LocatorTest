@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.faq.dao.FaqMapper">
+
+	<resultMap id="faqListResultMap" type="kr.co.msync.web.module.faq.model.FaqVO">
+		<result property="no_faq" column="no_faq"/>
+		<result property="no_item" column="no_item"/>
+		<result property="item_name" column="item_name"/>
+		<result property="item_name_en" column="item_name_en"/>
+		<result property="faq_q" column="faq_q"/>
+		<result property="faq_a" column="faq_a"/>
+		<result property="faq_keyword" column="faq_keyword"/>
+		<result property="wordSearch" column="wordSearch"/>
+		<collection property="faqItemSubList" column="no_faq" ofType="kr.co.msync.web.module.faq.model.FaqVO" select="getFaqItemSubList"/>
+	</resultMap>
+
+	<select id="getFaqItemList" resultType="kr.co.msync.web.module.faq.model.FaqVO">
+		select no_item
+		, item_name
+		, item_name_en
+		, p_no_item
+		from tb_faq_item
+	</select>
+
+	<select id="getFaqList" parameterType="kr.co.msync.web.module.faq.model.FaqVO" resultMap = "faqListResultMap">
+		select a.no_item
+		, item_name
+		, item_name_en
+		, no_faq
+		, faq_q
+		, faq_a
+		, faq_keyword
+		from
+			tb_faq a , tb_faq_item b
+		<where>
+			a.no_p_faq is null
+			<if test="no_item == null or no_item.equals('')">
+				and main_yn = 'Y'
+			</if>
+			<if test="no_item!=null and !no_item.equals('')">
+				and a.NO_ITEM = b.NO_ITEM
+				and a.no_item = #{no_item}
+			</if>
+			<if test="wordSearch != null and !wordSearch.equals('')">
+				and (faq_q like concat('%', #{wordSearch}, '%')
+				or faq_a like concat('%', #{wordSearch}, '%')
+				or replace(faq_keyword, ' ', '') like concat('%', replace(#{wordSearch}, ' ', ''), '%'))
+			</if>
+		</where>
+		limit #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="getFaqListCnt" parameterType="kr.co.msync.web.module.faq.model.FaqVO" resultType="int">
+		select count(a.no_item)
+		from
+			tb_faq a, tb_faq_item b
+		<where>
+			a.no_p_faq is null
+			<if test="no_item == null or no_item.equals('')">
+				and main_yn = 'Y'
+			</if>
+			<if test="no_item!=null and !no_item.equals('')">
+				and a.NO_ITEM = b.NO_ITEM
+				and a.no_item = #{no_item}
+			</if>
+			<if test="wordSearch != null and !wordSearch.equals('')">
+				and  (faq_q like concat('%', #{wordSearch}, '%')
+				or faq_a like concat('%', #{wordSearch}, '%')
+				or replace(faq_keyword, ' ', '') like concat('%', replace(#{wordSearch}, ' ', ''), '%'))
+			</if>
+		</where>
+	</select>
+
+	<select id="getFaqItemSubList" resultType="kr.co.msync.web.module.faq.model.FaqVO">
+		select
+			no_faq, no_p_faq, no_item, faq_q, faq_a, faq_keyword
+			, reg_id, reg_name, reg_date, mod_id, mod_name, mod_date
+	  	from
+	  		tb_faq
+	  	where
+	  	  	no_p_faq = #{no_faq}
+	</select>
+
+</mapper>

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.common.dao.CommonMapper">
+
+	<select id="getSequence" statementType="CALLABLE" parameterType="hashmap">
+		{ call getSequence
+				(
+					#{tableName, mode=IN, jdbcType=VARCHAR},
+					#{col, mode=IN, jdbcType=VARCHAR},
+					#{numCnt, mode=IN, jdbcType=NUMERIC},
+					#{seq, mode=OUT, jdbcType=VARCHAR}
+				)
+		}
+	</select>
+
+	<update id="regHistoryAction" useGeneratedKeys="true" keyProperty="no_hist" parameterType="kr.co.msync.web.module.common.model.req.CommonReqVO">
+		insert into tb_history (
+			  NO_MENU
+			, NO_USER
+			, ACTION_TIME
+			, ACTION_STATUS
+		) values (
+			  #{no_menu, jdbcType=VARCHAR}
+			, #{no_user, jdbcType=VARCHAR}
+			, #{action_time, jdbcType=VARCHAR}
+			, #{action_status, jdbcType=VARCHAR}
+		)
+	</update>
+
+	<update id="selectInsertStoreInfo" parameterType="kr.co.msync.web.module.common.model.req.CommonReqVO">
+		insert into tb_store_master_hist
+		(
+		  no_hist
+		, store_code
+		, store_type
+		, store_name
+		, store_addr
+		, store_addr_dtl
+		, latitude
+		, longitude
+		, come_way
+		, tel_num
+		, closed_date
+		, oper_week_time
+		, oper_time
+		, as_time
+		, parking_yn
+		, treat_yn
+		, cust_desc
+		, notice
+		, store_status
+		, store_due_date
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		) select
+		  #{no_hist, jdbcType=VARCHAR}
+		, store_code
+		, store_type
+		, store_name
+		, store_addr
+		, store_addr_dtl
+		, latitude
+		, longitude
+		, come_way
+		, tel_num
+		, closed_date
+		, oper_week_time
+		, oper_time
+		, as_time
+		, parking_yn
+		, treat_yn
+		, cust_desc
+		, notice
+		, store_status
+		, store_due_date
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		from tb_store_master where store_code = #{no_seq}
+	</update>
+
+	<update id="selectInsertServiceInfo" parameterType="kr.co.msync.web.module.common.model.req.CommonReqVO">
+		insert into tb_service_hist
+		(
+		  no_hist
+		, no_service
+		, service_div
+		, service_name
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		) select
+		  #{no_hist, jdbcType=VARCHAR}
+		, no_service
+		, service_div
+		, service_name
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_service where no_service = #{no_seq}
+	</update>
+
+	<update id="selectInsertDeviceInfo" parameterType="kr.co.msync.web.module.common.model.req.CommonReqVO">
+		insert into tb_device_master_hist
+		(
+		  no_hist
+		, no_device
+		, no_cate
+		, device_name
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		) select
+		  #{no_hist, jdbcType=VARCHAR}
+		, no_device
+		, no_cate
+		, device_name
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_device_master where no_device = #{no_seq}
+	</update>
+
+	<update id="selectInsertColorInfo" parameterType="kr.co.msync.web.module.common.model.req.CommonReqVO">
+		insert into tb_device_color_hist
+		(
+		  no_hist
+		, no_color
+		, color_name
+		, color_rgb
+		, color_sno
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		) select
+		  #{no_hist, jdbcType=VARCHAR}
+		, no_color
+		, color_name
+		, color_rgb
+		, color_sno
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_device_color where no_color = #{no_seq}
+	</update>
+
+	<update id="selectInsertUserInfo" parameterType="kr.co.msync.web.module.common.model.req.CommonReqVO">
+		insert into tb_user_hist
+		(
+		  no_hist
+		, no_user
+		, login_id
+		, user_name
+		, user_en_name
+		, email_addr
+		, user_company
+		, user_channel
+		, password
+		, user_grt
+		, reg_way
+		, user_status
+		, del_yn
+		, reg_date
+		, mod_date
+		, last_pwd_mod_date
+		) select
+		  #{no_hist, jdbcType=VARCHAR}
+		, no_user
+		, login_id
+		, user_name
+		, user_en_name
+		, email_addr
+		, user_company
+		, user_channel
+		, password
+		, user_grt
+		, reg_way
+		, user_status
+		, del_yn
+		, reg_date
+		, mod_date
+		, last_pwd_mod_date
+		from tb_user where no_user = #{no_seq}
+	</update>
+
+	<update id="selectInsertCategoryInfo" parameterType="kr.co.msync.web.module.common.model.req.CommonReqVO">
+		insert into tb_category_hist
+		(
+		no_hist
+	  , no_cate
+	  , cate_name
+	  , file_path
+	  , origin_name
+	  , save_name
+	  , file_size
+	  , width
+	  , height
+	  , file_ext
+	  , sell_yn
+	  , excg_yn
+	  , del_yn
+	  , reg_id
+	  , reg_name
+	  , reg_date
+	  , mod_id
+	  , mod_name
+	  , mod_date
+		) select
+		#{no_hist, jdbcType=VARCHAR}
+		, no_cate
+		, cate_name
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, sell_yn
+		, excg_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_category where no_cate = #{no_seq}
+	</update>
+
+	<update id="updateClosedUser" parameterType="kr.co.msync.web.module.common.model.req.CloseDateReqVO">
+		  <selectKey keyProperty="closed_user_date" resultType="String" order="AFTER">
+			 select date_format(closed_user_date, '%H시 %i분') as closed_user_date from tb_user where login_id = #{login_id}
+		  </selectKey>
+		  update tb_user
+			set closed_user_date =
+			date_format(SUBDATE(NOW(),
+			INTERVAL
+				case
+					when user_grt = '01' or  user_grt = '02' then -30
+					else -5
+				end
+			MINUTE), '%Y%m%d%H%i%s')
+		  where login_id = #{login_id}
+	</update>
+
+	<select id="getCloseUser" parameterType="kr.co.msync.web.module.common.model.req.CloseDateReqVO" resultType="kr.co.msync.web.module.common.model.res.CloseDateResVO">
+		select ifnull(closed_user_date > date_format(now(), '%Y%m%d%H%i%s'),0) as cnt, date_format(closed_user_date, '%H시 %i분') as closed_user_date from tb_user where login_id = #{login_id}
+	</select>
+
+	<update id="initCloseUser" parameterType="kr.co.msync.web.module.common.model.req.CloseDateReqVO">
+		  update tb_user set closed_user_date = '' where login_id = #{login_id}
+	</update>
+</mapper>

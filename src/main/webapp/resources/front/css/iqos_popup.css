@@ -1,0 +1,78 @@
+
+/*
+ * File       : iqos_popup.css
+ * Author     : m-sync (baeyoungseop)
+ * Summary:
+ * 1) 아이코스용 팝업
+ */
+
+
+.iqos_popup {
+    z-index: 99999;
+    visibility: hidden;
+}
+.iqos_popup .pop_close {
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    width: 40px;
+    height: 40px;
+    background: #b3988c url(../images/icon_close_white.png) no-repeat center center;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+
+/* 19-07-24 
+** 택배교환만 가능한 상품 팝업 
+*/
+.iqos_popup.only-parcel {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+}
+.iqos_popup.only-parcel .pop_inner {
+    width: 240px;
+    padding: 30px;
+    background: #152a40;
+}
+.iqos_popup.only-parcel .pop_inner .pop_des p {
+    font-size: 16px;
+    color: #b3988c;
+    font-weight: bold;
+}
+.iqos_popup.only-parcel .pop_inner .pop_des span {
+    display: block;
+    color: #fff;
+    margin-top: 5px;
+    font-size: 12px;
+}
+.iqos_popup.only-parcel .pop_inner .pop_footer {
+    margin-top: 40px;
+}
+.iqos_popup.only-parcel .pop_inner .pop_footer h5 {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.6em;
+}
+.iqos_popup.only-parcel .pop_inner .pop_footer p {
+    font-size: 12px;
+    color: #fff;
+    line-height: 1.6em;
+    font-weight: 300;
+}
+.iqos_popup.only-parcel .pop_inner .pop_footer p a {
+    color: inherit;
+    vertical-align: baseline;
+    font-size: inherit;
+}
+.iqos_popup.only-parcel .pop_inner .pop_footer p.bb1 {
+    border-bottom: 1px solid #fff;
+    display: inline-block;
+}

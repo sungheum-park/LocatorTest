@@ -1,0 +1,291 @@
+@charset "utf-8";
+
+.common-padding {
+    padding: 90px 0 180px;
+}
+.section_title h2 {
+    font-size: 48px;
+    font-weight: bold;
+    line-height: 1.4em;
+}
+.section_title h2 span {
+    color: #9d8276;
+    vertical-align: baseline;
+    font-size: inherit;
+}
+.section_title p {
+    font-size: 48px;
+    font-weight: bold;
+    line-height: 1.2em;
+}
+.section_title p.color_sub {
+    color: #9d8276;
+}
+
+.sub_title h4 {
+    font-size: 30px;
+    font-weight: bold;
+}
+.default_des p {
+    font-size: 18px;
+    word-break: keep-all;
+    line-height: 1.7em;
+    position: relative;
+}
+
+.ad_wrap {
+    max-width: 1560px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    z-index: 998;
+}
+.kakaotalk_popup {
+    position: absolute;
+    width: 120px;
+    top: 140px;
+    right: 0;
+    border: 1px solid #ccc;
+}
+.kakaotalk_popup .popup_top {
+    background: #fee800;
+    padding: 13px;
+}
+.kakaotalk_popup .popup_top .pop_title p {
+    font-size: 16px;
+    font-weight: bold;
+    background: url(../images/kakaotalk_c.png) right top 4px no-repeat;
+}
+.kakaotalk_popup .popup_top .pop_text {
+    margin-top: 25px;
+}
+.kakaotalk_popup .popup_top .pop_text p {
+    font-size: 12px;
+}
+.kakaotalk_popup .popup_top .pop_text p strong {
+    font-size: inherit;
+    vertical-align: baseline;
+}
+.kakaotalk_popup .popup_bottom {
+    padding: 13px;
+    background: #fff;
+}
+.kakaotalk_popup .popup_bottom .pop_des p {
+    font-size: 12px;
+    color: #9d8276;
+}
+.kakaotalk_popup .popup_bottom .link {
+    margin-top: 15px;
+}
+.kakaotalk_popup .popup_bottom .link a {
+    font-size: 12px;
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+}
+.kakaotalk_popup .pop_mo {
+    display: none;
+    cursor: pointer;
+}
+.kakaotalk_popup .pop_circle {
+    width: 60px;
+    height: 60px;
+    background: #fee800;
+    border-radius: 100%;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    -ms-border-radius: 100%;
+    -o-border-radius: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+.kakaotalk_popup .pop_circle ._img_wrap {
+    max-width: 20px;
+}
+.kakaotalk_popup .pop_circle p {
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+
+.btn_top_wrap {
+    max-width: 1560px;
+    width: 100%;
+    position: fixed;
+    bottom: 33%;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    z-index: 99999;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 1s ease-in-out;
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -ms-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+}
+.btn_top_wrap.on {
+    visibility: visible;
+    opacity: 1;
+}
+.btn_top_wrap .btn_top {
+    position: absolute;
+    right: 0;
+    top: 136px;
+    transform-origin: right bottom;
+    transform: rotate(-90deg) translateX(100%);
+    -webkit-transform: rotate(-90deg) translateX(100%);
+    -moz-transform: rotate(-90deg) translateX(100%);
+    -ms-transform: rotate(-90deg) translateX(100%);
+    -o-transform: rotate(-90deg) translateX(100%);
+}
+.btn_top_wrap .btn_top a {
+    font-size: 18px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0;
+    padding-right: 28px;
+    background: url(../images/icon_ctn.png) no-repeat right center;
+    background-size: 20px;
+}
+
+
+.search_wrap {
+    margin-top: 30px;
+    position:relative;
+}
+.search_wrap span.search_btn {
+    position:absolute;
+    top: 50%;
+    right: 22px;
+    width: 23px;
+    height: 23px;
+    background: url(../images/service/icon_search.png) no-repeat;
+    background-size: 100%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+/* .search_wrap:after {
+    position:absolute;
+    content:"";
+    top: 50%;
+    right: 22px;
+    width: 23px;
+    height: 23px;
+    background: url(../images/icon_search.png) no-repeat;
+    background-size: 100%;
+    transform: translateY(-50%);
+} */
+.search_wrap input{
+    display: block;
+    padding: 0 20px;
+    width: 100%;
+    max-height: 62px;
+    line-height: 62px;
+    border: 2px solid #9d8276;
+    font-size: 20px;
+}
+.search_wrap input::placeholder {
+    color: #9d8276;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -0.05em;
+}
+
+
+
+
+@media screen and (max-width: 1577px) {
+    .kakaotalk_popup {
+        right: 20px;
+    }
+    .btn_top_wrap .btn_top {
+        right: 28px;
+    }
+}
+@media screen and (max-width: 1024px) {
+    .ad_wrap {
+        bottom: 60px;
+        top: auto;
+    }
+    .kakaotalk_popup .pop_pc {
+        display: none;
+    }
+    .kakaotalk_popup {
+        width: auto;
+        top: auto;
+        bottom: 0;
+        border: none;
+    }
+    .kakaotalk_popup .pop_mo {
+        display: block;
+    }
+
+    .btn_top_wrap {
+        bottom: 50px;
+    }
+    .btn_top_wrap .btn_top {
+        transform: none;
+        -webkit-transform: none;
+        -moz-transform: none;
+        -ms-transform: none;
+        -o-transform: none;
+        top: 0;
+    }
+    .btn_top_wrap .btn_top a {
+        background-image: url(../images/icon_arrow_up.png);
+        background-size: 10px;
+        padding-right: 16px;
+        font-size: 14px;
+    }
+}
+
+
+
+@media screen and (max-width: 768px) {
+    section.common-padding {
+        padding: 48px 0;
+    }
+
+    section .section_title p {
+        font-size: 26px;
+        line-height: 1.4em;
+    }
+    .section_title h2 {
+        font-size: 26px;
+    }    
+    .sub_title h4 {
+        font-size: 20px;
+    }
+    .default_des p {
+        font-size: 14px;
+    }
+    .search_wrap input::placeholder {
+        font-size: 16px;
+    }
+    
+}
+
+
+
+#moment, #resetting {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-left: -32px;
+    margin-top: -32px;
+    visibility: hidden;
+}
+

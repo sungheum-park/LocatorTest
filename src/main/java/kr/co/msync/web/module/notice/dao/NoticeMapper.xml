@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.notice.dao.NoticeMapper">
+
+	<sql id="noticeListSelect">
+		<if test="no_notice!=null and !no_notice.equals('')">
+			AND x.no_notice = #{no_notice, jdbcType=VARCHAR}
+		</if>
+		<if test="notice_title!=null and !notice_title.equals('')">
+			AND x.notice_title LIKE REPLACE(CONCAT('%',#{notice_title},'%'),' ','')
+		</if>
+		<if test="notice_div!=null and !notice_div.equals('')">
+			AND x.notice_div = #{notice_div, jdbcType=VARCHAR}
+		</if>
+		<if test="notice_contents!=null and !notice_contents.equals('')">
+			AND x.notice_contents LIKE REPLACE(CONCAT('%',#{notice_contents},'%'),' ','')
+		</if>
+		<if test="display_yn!=null and !display_yn.equals('')">
+			AND x.display_yn = #{display_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="del_yn!=null and !del_yn.equals('')">
+			AND x.del_yn = #{del_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_id!=null and !reg_id.equals('')">
+			AND x.reg_id = #{reg_id, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_name!=null and !reg_name.equals('')">
+			AND x.reg_name LIKE REPLACE(CONCAT('%',#{reg_name},'%'),' ','')
+		</if>
+		<if test="reg_date_start!=null and !reg_date_start.equals('')">
+			AND substring(x.reg_date,1,8) >= replace(#{reg_date_start},'-','')
+		</if>
+		<if test="reg_date_end!=null and !reg_date_end.equals('')">
+			AND substring(x.reg_date,1,8) &lt;= replace(#{reg_date_end},'-','')
+		</if>
+		<if test="mod_id!=null and !mod_id.equals('')">
+			AND x.mod_id = #{mod_id, jdbcType=VARCHAR}
+		</if>
+		<if test="mod_name!=null and !mod_name.equals('')">
+			AND x.mod_name LIKE REPLACE(CONCAT('%',#{mod_name},'%'),' ','')
+		</if>
+		<if test="mod_date_start!=null and !mod_date_start.equals('')">
+			AND substring(x.mod_date,1,8) >= replace(#{mod_date_start},'-','')
+		</if>
+		<if test="mod_date_end!=null and !mod_date_end.equals('')">
+			AND substring(x.mod_date,1,8) &lt;= replace(#{mod_date_end},'-','')
+		</if>
+	</sql>
+
+	<select id="getNoticeList" parameterType="kr.co.msync.web.module.notice.model.req.NoticeReqVO" resultType="kr.co.msync.web.module.notice.model.res.NoticeResVO">
+		select
+		  x.no_notice
+		, x.notice_title
+		, x.notice_div
+		, x.notice_contents
+		, x.file_path
+		, x.origin_name
+		, x.save_name
+		, x.file_size
+		, x.width
+		, x.height
+		, x.file_ext
+		, x.display_time_start
+		, x.display_time_end
+		, x.display_yn
+		, x.del_yn
+		, x.reg_id
+		, x.reg_name
+		, x.reg_date
+		, x.mod_id
+		, x.mod_name
+		, x.mod_date
+		from (select
+		  no_notice
+		, notice_title
+		, notice_div
+		, notice_contents
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, display_time_start
+		, display_time_end
+		, display_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_notice) x
+		where 1=1
+		<include refid="noticeListSelect" />
+		ORDER BY ${order_column} ${order_type}
+		limit #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="getNoticeListCnt" parameterType="kr.co.msync.web.module.notice.model.req.NoticeReqVO" resultType="int">
+		select
+		count(*) cnt
+		from (select
+		  no_notice
+		, notice_title
+		, notice_div
+		, notice_contents
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, display_time_start
+		, display_time_end
+		, display_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_notice) x
+		where 1=1
+		<include refid="noticeListSelect" />
+	</select>
+
+	<select id="getNoticeInfo" parameterType="kr.co.msync.web.module.notice.model.req.NoticeReqVO" resultType="kr.co.msync.web.module.notice.model.res.NoticeResVO">
+		select
+			  no_notice
+			, notice_title
+			, notice_div
+			, notice_contents
+			, file_path
+			, origin_name
+			, save_name
+			, file_size
+			, width
+			, height
+			, file_ext
+			, display_time_start
+			, display_time_end
+			, display_yn
+			, del_yn
+			, reg_id
+			, reg_name
+			, reg_date
+			, mod_id
+			, mod_name
+			, mod_date
+		from tb_notice
+		WHERE no_notice = #{no_notice}
+	</select>
+
+	<update id="noticeRegAction" parameterType="kr.co.msync.web.module.notice.model.req.NoticeReqVO">
+		insert into tb_notice (
+			  notice_title
+			, notice_div
+			, notice_contents
+			, file_path
+			, origin_name
+			, save_name
+			, file_size
+			, width
+			, height
+			, file_ext
+			, display_time_start
+			, display_time_end
+			, display_yn
+			, del_yn
+			, reg_id
+			, reg_name
+			, reg_date
+		) values (
+			  #{notice_title, jdbcType=VARCHAR}
+			, #{notice_div, jdbcType=VARCHAR}
+			, #{notice_contents, jdbcType=VARCHAR}
+			, #{file_path, jdbcType=VARCHAR}
+			, #{origin_name, jdbcType=VARCHAR}
+			, #{save_name, jdbcType=VARCHAR}
+			, #{file_size, jdbcType=VARCHAR}
+			, #{width, jdbcType=VARCHAR}
+			, #{height, jdbcType=VARCHAR}
+			, #{file_ext, jdbcType=VARCHAR}
+			, replace(replace(replace(#{display_time_start, jdbcType=VARCHAR},' ',''),'-',''),':','')
+			, replace(replace(replace(#{display_time_end, jdbcType=VARCHAR},' ',''),'-',''),':','')
+			, #{display_yn, jdbcType=VARCHAR}
+			, #{del_yn, jdbcType=VARCHAR}
+			, #{reg_id, jdbcType=VARCHAR}
+			, #{reg_name, jdbcType=VARCHAR}
+			, #{reg_date, jdbcType=VARCHAR}
+		)
+	</update>
+
+	<update id="noticeModAction" parameterType="kr.co.msync.web.module.notice.model.req.NoticeReqVO">
+		update tb_notice set
+			notice_title = #{notice_title, jdbcType=VARCHAR}
+			, notice_div = #{notice_div, jdbcType=VARCHAR}
+			, notice_contents = #{notice_contents, jdbcType=VARCHAR}
+			, file_path = #{file_path, jdbcType=VARCHAR}
+			, origin_name = #{origin_name, jdbcType=VARCHAR}
+			, save_name = #{save_name, jdbcType=VARCHAR}
+			, file_size = #{file_size, jdbcType=VARCHAR}
+			, width = #{width, jdbcType=VARCHAR}
+			, height = #{height, jdbcType=VARCHAR}
+			, file_ext = #{file_ext, jdbcType=VARCHAR}
+			, display_time_start = replace(replace(replace(#{display_time_start, jdbcType=VARCHAR},' ',''),'-',''),':','')
+			, display_time_end = replace(replace(replace(#{display_time_end, jdbcType=VARCHAR},' ',''),'-',''),':','')
+			, display_yn = #{display_yn, jdbcType=VARCHAR}
+			, mod_id = #{mod_id, jdbcType=VARCHAR}
+			, mod_name = #{mod_name, jdbcType=VARCHAR}
+			, mod_date = #{mod_date, jdbcType=VARCHAR}
+		where no_notice = #{no_notice, jdbcType=VARCHAR}
+	</update>
+
+	<update id="noticeDelAction" parameterType="kr.co.msync.web.module.notice.model.req.NoticeReqVO">
+		UPDATE tb_notice SET DEL_YN = 'Y', mod_id = #{mod_id, jdbcType=VARCHAR}, mod_name = #{mod_name, jdbcType=VARCHAR}, mod_date = #{mod_date, jdbcType=VARCHAR}
+		WHERE no_notice in <foreach collection="del_no_notice" item="no_notice" index="index" separator="," open="(" close=")">
+		#{no_notice}
+	</foreach>
+	</update>
+
+</mapper>

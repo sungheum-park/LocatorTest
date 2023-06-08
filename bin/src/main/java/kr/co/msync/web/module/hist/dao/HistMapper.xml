@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.hist.dao.HistMapper">
+
+	<sql id="histListSelect">
+		<if test="login_id!=null and !login_id.equals('')">
+			AND x.login_id LIKE REPLACE(CONCAT('%',#{login_id},'%'),' ','')
+		</if>
+		<if test="user_name!=null and !user_name.equals('')">
+			AND x.user_name LIKE REPLACE(CONCAT('%',#{user_name},'%'),' ','')
+		</if>
+		<if test="user_grt!=null and !user_grt.equals('')">
+			AND x.user_grt = #{user_grt, jdbcType=VARCHAR}
+		</if>
+		<if test="no_menu!=null and !no_menu.equals('')">
+			AND x.no_menu = #{no_menu, jdbcType=VARCHAR}
+		</if>
+		<if test="action_status!=null and !action_status.equals('')">
+			AND x.action_status = #{action_status, jdbcType=VARCHAR}
+		</if>
+		<if test="action_time_start!=null and !action_time_start.equals('')">
+			AND substring(x.action_time,1,8) >= replace(#{action_time_start},'-','')
+		</if>
+		<if test="action_time_end!=null and !action_time_end.equals('')">
+			AND substring(x.action_time,1,8) &lt;= replace(#{action_time_end},'-','')
+		</if>
+	</sql>
+
+	<select id="getHistList" parameterType="kr.co.msync.web.module.hist.model.req.HistReqVO" resultType="kr.co.msync.web.module.hist.model.res.HistResVO">
+		select
+		x.no_hist
+		, x.login_id
+		, x.user_name
+		, x.user_grt
+		, x.no_menu
+		, x.action_status
+		, x.action_time
+		from (select
+		  b.no_hist
+		, (select login_id from tb_user a where a.no_user = b.no_user) as login_id
+		, (select user_name from tb_user a where a.no_user = b.no_user) as user_name
+		, (select user_grt from tb_user a where a.no_user = b.no_user) as user_grt
+		, b.no_menu
+		, b.action_status
+		, b.action_time
+		from tb_history b) x
+		where 1=1
+		<include refid="histListSelect" />
+		ORDER BY ${order_column} ${order_type}
+		limit #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="getHistListCnt" parameterType="kr.co.msync.web.module.hist.model.req.HistReqVO" resultType="int">
+		select
+		count(*) cnt
+		from (select
+		  b.no_hist
+		, (select login_id from tb_user a where a.no_user = b.no_user) as login_id
+		, (select user_name from tb_user a where a.no_user = b.no_user) as user_name
+		, (select user_grt from tb_user a where a.no_user = b.no_user) as user_grt
+		, b.no_menu
+		, b.action_status
+		, b.action_time
+		from tb_history b) x
+		where 1=1
+		<include refid="histListSelect" />
+	</select>
+
+	<resultMap id="histViewInfo" type="kr.co.msync.web.module.hist.model.res.HistResVO">
+		<result property="no_hist" column="NO_HIST"/>
+		<result property="no_menu" column="NO_MENU"/>
+		<result property="no_user" column="NO_USER"/>
+		<result property="login_id" column="LOGIN_ID"/>
+		<result property="user_name" column="USER_NAME"/>
+		<result property="user_grt" column="USER_GRT"/>
+		<result property="action_status" column="ACTION_STATUS"/>
+		<result property="action_time" column="ACTION_TIME"/>
+		<collection property="masterVO" column="{no_hist=no_hist, no_menu=no_menu}" javaType="java.util.ArrayList" ofType="kr.co.msync.web.module.hist.model.res.MasterResVO" select="getHistoryList"/>
+	</resultMap>
+
+	<select id="getHistViewInfo" parameterType="kr.co.msync.web.module.hist.model.req.HistReqVO" resultMap="histViewInfo">
+		select
+		    b.no_hist
+		  , b.no_menu
+		  , b.no_user
+		  , (select login_id from tb_user a where a.no_user = b.no_user) as login_id
+		  , (select user_name from tb_user a where a.no_user = b.no_user) as user_name
+		  , (select user_grt from tb_user a where a.no_user = b.no_user) as user_grt
+		  , b.action_status
+		  , b.action_time
+		from tb_history b
+		WHERE b.no_hist in
+		<foreach collection="check_no_hist" item="no_hist" index="index" separator="," open="(" close=")">
+			#{no_hist}
+		</foreach>
+	</select>
+
+	<select id="getHistoryList" resultType="kr.co.msync.web.module.hist.model.res.MasterResVO">
+		<if test="no_menu!=null and !no_menu.equals('') and no_menu.equals('01')">
+			select
+			  x.no_hist
+			, x.store_code
+			, x.store_type
+			, x.store_name
+			, x.store_addr
+			, x.store_addr_dtl
+			, concat(x.store_addr, ifnull(x.store_addr_dtl,'')) as store_total_addr
+			, x.latitude
+			, x.longitude
+			, x.come_way
+			, x.tel_num
+			, x.closed_date
+			, x.oper_time
+			, x.oper_week_time
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(x.OPER_WEEK_TIME, ',', 1), ',', -1) as oper_week_time_0
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(x.OPER_WEEK_TIME, ',', 2), ',', -1) as oper_week_time_1
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(x.OPER_WEEK_TIME, ',', 3), ',', -1) as oper_week_time_2
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(x.OPER_WEEK_TIME, ',', 4), ',', -1) as oper_week_time_3
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(x.OPER_WEEK_TIME, ',', 5), ',', -1) as oper_week_time_4
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(x.OPER_WEEK_TIME, ',', 6), ',', -1) as oper_week_time_5
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(x.OPER_WEEK_TIME, ',', 7), ',', -1) as oper_week_time_6
+			, x.as_time
+			, x.parking_yn
+			, x.treat_yn
+			, x.cust_desc
+			, x.notice
+			, x.store_status
+			, x.store_due_date
+			, (select group_concat(b.origin_name order by b.no_file asc separator ', ') from tb_store_photo b where b.store_code = x.store_code) as file_map_array
+			, (select group_concat(x.service_name order by x.no_service asc separator ', ') from tb_service x join tb_store_service_map b where x.no_service = b.no_service and b.store_code = x.store_code) as service_map_array
+			, (select group_concat(x.cate_name order by x.no_cate asc separator ', ') from tb_category x join tb_sell_device_map b where x.no_cate = b.no_cate and b.store_code = x.store_code) as sell_array
+			, (select group_concat(concat(concat(concat(concat(c.cate_name, '-'), d.device_name), '-'), b.color_name) order by a.no_cate asc, a.no_device asc, a.no_color asc separator ', ') from tb_excg_device_map a JOIN tb_device_color b ON a.NO_COLOR = b.NO_COLOR JOIN tb_category c ON a.NO_cate = c.NO_CATE JOIN tb_device_master d ON a.no_device = d.no_device where a.store_code = x.store_code) as excg_array
+			, x.del_yn
+			, x.reg_id
+			, x.reg_name
+			, x.reg_date
+			, x.mod_id
+			, x.mod_name
+			, x.mod_date
+			from tb_store_master_hist x
+			where x.no_hist = #{no_hist}
+		</if>
+		<if test="no_menu!=null and !no_menu.equals('') and no_menu.equals('02')">
+			select
+			  no_hist
+			, no_service
+			, service_div
+			, service_name
+			, file_path
+			, origin_name
+			, save_name
+			, file_size
+			, width
+			, height
+			, file_ext
+			, use_yn
+			, del_yn
+			, reg_id
+			, reg_name
+			, reg_date
+			, mod_id
+			, mod_name
+			, mod_date
+			from tb_service_hist
+			where no_hist = #{no_hist}
+		</if>
+		<if test="no_menu!=null and !no_menu.equals('') and no_menu.equals('03')">
+			select
+			  no_hist
+			, no_device
+			, no_cate
+			, (select a.cate_name from tb_category a where a.no_cate = b.no_cate) as cate_name
+			, device_name
+			, (select group_concat(a.color_name order by c.no_color asc separator ', ') from tb_device_color a join tb_device_color_map c where a.no_color = c.no_color and c.no_device = b.no_device) as color_name_array
+			, file_path
+			, origin_name
+			, save_name
+			, file_size
+			, width
+			, height
+			, file_ext
+			, use_yn
+			, del_yn
+			, reg_id
+			, reg_name
+			, reg_date
+			, mod_id
+			, mod_name
+			, mod_date
+			from tb_device_master_hist b where b.no_hist = #{no_hist}
+		</if>
+		<if test="no_menu!=null and !no_menu.equals('') and no_menu.equals('04')">
+			select
+			  no_hist
+			, no_color
+			, color_name
+			, color_rgb
+			, color_sno
+			, use_yn
+			, del_yn
+			, reg_id
+			, reg_name
+			, reg_date
+			, mod_id
+			, mod_name
+			, mod_date
+			from tb_device_color_hist
+			where no_hist = #{no_hist}
+		</if>
+		<if test="no_menu!=null and !no_menu.equals('') and no_menu.equals('05')">
+			select
+			  no_hist
+			, no_user
+			, login_id
+			, user_name
+			, user_en_name
+			, email_addr
+			, user_company
+			, user_channel
+			, password
+			, user_grt
+			, user_status
+			, reg_way
+			, del_yn
+			, reg_date
+			, mod_date
+			, last_pwd_mod_date
+			FROM tb_user_hist
+			where no_hist = #{no_hist}
+		</if>
+		<if test="no_menu!=null and !no_menu.equals('') and no_menu.equals('06')">
+			select
+			no_hist
+			, no_cate
+			, cate_name
+			, file_path
+			, origin_name
+			, save_name
+			, file_size
+			, width
+			, height
+			, file_ext
+			, sell_yn
+			, excg_yn
+			, del_yn
+			, reg_id
+			, reg_name
+			, reg_date
+			, mod_id
+			, mod_name
+			, mod_date
+			FROM tb_category_hist
+			where no_hist = #{no_hist}
+		</if>
+	</select>
+
+</mapper>

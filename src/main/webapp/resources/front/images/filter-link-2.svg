@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="14" height="11" viewBox="0 0 14 11">
+  <g id="Filter_icon" transform="translate(-31 -164)">
+    <g id="그룹_278" data-name="그룹 278" transform="translate(6.5)">
+      <line id="선_5" data-name="선 5" x2="14" transform="translate(24.5 166.5)" fill="none" stroke="#34303d" stroke-width="1"/>
+      <g id="타원_3" data-name="타원 3" transform="translate(27 164)" fill="#fff" stroke="#34303d" stroke-width="1">
+        <circle cx="2.5" cy="2.5" r="2.5" stroke="none"/>
+        <circle cx="2.5" cy="2.5" r="2" fill="none"/>
+      </g>
+    </g>
+    <g id="그룹_279" data-name="그룹 279" transform="translate(69.5 339) rotate(180)">
+      <line id="선_5-2" data-name="선 5" x2="14" transform="translate(24.5 166.5)" fill="none" stroke="#34303d" stroke-width="1"/>
+      <g id="타원_3-2" data-name="타원 3" transform="translate(27 164)" fill="#fff" stroke="#34303d" stroke-width="1">
+        <circle cx="2.5" cy="2.5" r="2.5" stroke="none"/>
+        <circle cx="2.5" cy="2.5" r="2" fill="none"/>
+      </g>
+    </g>
+  </g>
+</svg>

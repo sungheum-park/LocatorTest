@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+			http://www.springframework.org/schema/util
+			http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+
+    <!-- ========================= Property ========================= -->
+    <util:properties id="config" location="classpath*:props/property-def.xml"/>
+
+    <!-- ========================= Jasypt ========================= -->
+    <bean id="encryptorConfig" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+        <property name="algorithm" value="PBEWithMD5AndDES"/>
+        <property name="password" value="fp3j103zz5upff09p5v1h2bbii451p3a"/>
+    </bean>
+    <bean id="encryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+        <property name="config" ref="encryptorConfig"/>
+    </bean>
+
+    <!-- ========================= Property ========================= -->
+    <bean class="org.jasypt.spring31.properties.EncryptablePropertyPlaceholderConfigurer">
+        <constructor-arg ref="encryptor"/>
+        <property name="locations">
+            <list>
+                <value>classpath:props/property-def.xml</value>
+            </list>
+        </property>
+    </bean>
+</beans>

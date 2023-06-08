@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /*/admin/
+Disallow : /action/
+Disallow : /selfCheck
+Disallow : /tutorial
+Disallow : /terms
+Disallow : /carePlus
+Disallow : /faq
+Sitemap: https://www.iqossvc.kr/sitemap.xml

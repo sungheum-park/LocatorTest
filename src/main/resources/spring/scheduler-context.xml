@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+						http://www.springframework.org/schema/task
+						http://www.springframework.org/schema/task/spring-task-4.2.xsd">
+
+    <task:scheduled-tasks>
+        <task:scheduled ref="smsIpScheduler" method="cron" cron="0 0 0 * * * "/>
+        <task:scheduled ref="storeOpenScheduler" method="cron" cron="0 5 0 * * * "/>
+        <task:scheduled ref="storeInfoScheduler" method="cron" cron="0 35 0 * * * "/>
+        <task:scheduled ref="histDelScheduler" method="cron" cron="0 30 1 * * * "/>
+    </task:scheduled-tasks>
+
+    <!--<bean id="sms_ip_build" class="kr.co.msync.web.module.scheduler.SmsIpScheduler" init-method="cron" >
+    </bean>-->
+
+    <!--<bean id="hist_del_build" class="kr.co.msync.web.module.scheduler.HistDelScheduler" init-method="cron" >
+    </bean>-->
+
+    <!--<bean id="store_open_build" class="kr.co.msync.web.module.scheduler.StoreOpenScheduler" init-method="cron" >
+    </bean>-->
+
+    <bean id="store_build" class="kr.co.msync.web.module.scheduler.StoreInfoScheduler" init-method="cron" >
+    </bean>
+
+</beans>

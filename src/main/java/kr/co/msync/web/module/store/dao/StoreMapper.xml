@@ -1,0 +1,851 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.store.dao.StoreMapper">
+
+	<sql id="storeListSelect">
+		<if test="store_code!=null and !store_code.equals('')">
+			AND x.store_code = #{store_code, jdbcType=VARCHAR}
+		</if>
+		<if test="store_type!=null and !store_type.equals('')">
+			AND x.store_type = #{store_type, jdbcType=VARCHAR}
+		</if>
+		<if test="store_name!=null and !store_name.equals('')">
+			AND x.store_name LIKE REPLACE(CONCAT('%',#{store_name},'%'),' ','')
+		</if>
+		<if test="store_total_addr!=null and !store_total_addr.equals('')">
+			AND x.store_total_addr LIKE REPLACE(CONCAT('%',#{store_total_addr},'%'),' ','')
+		</if>
+		<if test="come_way!=null and !come_way.equals('')">
+			AND x.come_way LIKE REPLACE(CONCAT('%',#{come_way},'%'),' ','')
+		</if>
+		<if test="tel_num!=null and !tel_num.equals('')">
+			AND x.tel_num LIKE REPLACE(CONCAT('%',#{tel_num},'%'),' ','')
+		</if>
+		<if test="parking_yn!=null and !parking_yn.equals('')">
+			AND x.parking_yn = #{parking_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="treat_yn!=null and !treat_yn.equals('')">
+			AND x.treat_yn = #{treat_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="cust_desc!=null and !cust_desc.equals('')">
+			AND x.cust_desc LIKE REPLACE(CONCAT('%',#{cust_desc},'%'),' ','')
+		</if>
+		<if test="notice!=null and !notice.equals('')">
+			AND x.notice LIKE REPLACE(CONCAT('%',#{notice},'%'),' ','')
+		</if>
+		<if test="store_status!=null and !store_status.equals('')">
+			AND x.store_status = #{store_status, jdbcType=VARCHAR}
+		</if>
+		<if test="del_yn!=null and !del_yn.equals('')">
+			AND x.del_yn = #{del_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_id!=null and !reg_id.equals('')">
+			AND x.reg_id = #{reg_id, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_name!=null and !reg_name.equals('')">
+			AND x.reg_name LIKE REPLACE(CONCAT('%',#{reg_name},'%'),' ','')
+		</if>
+		<if test="reg_date_start!=null and !reg_date_start.equals('')">
+			AND substring(x.reg_date,1,8) >= replace(#{reg_date_start},'-','')
+		</if>
+		<if test="reg_date_end!=null and !reg_date_end.equals('')">
+			AND substring(x.reg_date,1,8) &lt;= replace(#{reg_date_end},'-','')
+		</if>
+		<if test="mod_id!=null and !mod_id.equals('')">
+			AND x.mod_id = #{mod_id, jdbcType=VARCHAR}
+		</if>
+		<if test="mod_name!=null and !mod_name.equals('')">
+			AND x.mod_name LIKE REPLACE(CONCAT('%',#{mod_name},'%'),' ','')
+		</if>
+		<if test="mod_date_start!=null and !mod_date_start.equals('')">
+			AND substring(x.mod_date,1,8) >= replace(#{mod_date_start},'-','')
+		</if>
+		<if test="mod_date_end!=null and !mod_date_end.equals('')">
+			AND substring(x.mod_date,1,8) &lt;= replace(#{mod_date_end},'-','')
+		</if>
+	</sql>
+
+	<select id="getStoreExcelList" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO" resultType="kr.co.msync.web.module.store.model.res.StoreResVO">
+		select
+		x.store_code
+		, getCodeName("store_type",x.store_type) as store_type
+		, (select group_concat(b.origin_name order by b.no_file asc separator ', ') from tb_store_photo b where b.store_code = x.store_code) as file_map_array
+		, (select group_concat(x.service_name order by x.no_service asc separator ', ') from tb_service x join tb_store_service_map b where x.no_service = b.no_service and b.store_code = x.store_code) as service_map_array
+		, (select group_concat(x.cate_name order by x.no_cate asc separator ', ') from tb_category x join tb_sell_device_map b where x.no_cate = b.no_cate and b.store_code = x.store_code) as sell_array
+		, (select group_concat(concat(concat(concat(concat(c.cate_name, '-'), d.device_name), '-'), b.color_name) order by a.no_cate asc, a.no_device asc, a.no_color asc separator ', ') from tb_excg_device_map a JOIN tb_device_color b ON a.NO_COLOR = b.NO_COLOR JOIN tb_category c ON a.NO_cate = c.NO_CATE JOIN tb_device_master d ON a.no_device = d.no_device where a.store_code = x.store_code) as excg_array
+		, x.store_name
+		, x.store_addr
+		, x.store_addr_dtl
+		, x.store_total_addr
+		, x.latitude
+		, x.longitude
+		, x.come_way
+		, x.tel_num
+		, x.closed_date
+		, x.oper_time
+		, x.oper_week_time
+		, x.as_time
+		, getCodeName("parking_yn", x.parking_yn) as parking_yn
+		, getCodeName("treat_yn", x.treat_yn) as treat_yn
+		, x.cust_desc
+		, x.notice
+		, getCodeName("store_status", x.store_status) as store_status
+		, x.store_due_date
+		, x.del_yn
+		, x.reg_id
+		, x.reg_name
+		, x.reg_date
+		, x.mod_id
+		, x.mod_name
+		, x.mod_date
+		from (select
+		store_code
+		, store_type
+		, store_name
+		, store_addr
+		, store_addr_dtl
+		, concat(store_addr, ifnull(store_addr_dtl,'')) as store_total_addr
+		, latitude
+		, longitude
+		, come_way
+		, tel_num
+		, closed_date
+		, oper_time
+		, oper_week_time
+		, as_time
+		, parking_yn
+		, treat_yn
+		, cust_desc
+		, notice
+		, store_status
+		, store_due_date
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_store_master
+		<where>
+			<if test="user_grt == '03'">
+				store_type in
+				<foreach collection="store_type_arr" open="(" close=")" separator="," item="store_type_arr" >
+					#{store_type_arr}
+				</foreach>
+			</if>
+		</where>) x
+		where 1=1
+		<include refid="storeListSelect" />
+		ORDER BY ${order_column} ${order_type}
+	</select>
+
+	<select id="getStoreList" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO" resultType="kr.co.msync.web.module.store.model.res.StoreResVO">
+		select
+		x.store_code
+		, x.store_type
+		, x.store_name
+		, x.store_addr
+		, x.store_addr_dtl
+		, x.store_total_addr
+		, x.latitude
+		, x.longitude
+		, x.come_way
+		, x.tel_num
+		, x.closed_date
+		, x.oper_time
+		, x.oper_week_time
+		, x.as_time
+		, x.parking_yn
+		, x.treat_yn
+		, x.cust_desc
+		, x.notice
+		, x.store_status
+		, x.store_due_date
+		, x.del_yn
+		, x.reg_id
+		, x.reg_name
+		, x.reg_date
+		, x.mod_id
+		, x.mod_name
+		, x.mod_date
+		from (select
+		store_code
+		, store_type
+		, store_name
+		, store_addr
+		, store_addr_dtl
+		, concat(store_addr, ifnull(store_addr_dtl,'')) as store_total_addr
+		, latitude
+		, longitude
+		, come_way
+		, tel_num
+		, closed_date
+		, oper_time
+		, oper_week_time
+		, as_time
+		, parking_yn
+		, treat_yn
+		, cust_desc
+		, notice
+		, store_status
+		, store_due_date
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_store_master
+		<where>
+			<if test="user_grt == '03'">
+				store_type in
+				<foreach collection="store_type_arr" open="(" close=")" separator="," item="store_type_arr" >
+					#{store_type_arr}
+				</foreach>
+			</if>
+		</where>) x
+		where 1=1
+		<include refid="storeListSelect" />
+		ORDER BY ${order_column} ${order_type}
+		limit #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="getStoreListCnt" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO" resultType="int">
+		select
+		count(*) cnt
+		from (select
+		store_code
+		, store_type
+		, store_name
+		, store_addr
+		, store_addr_dtl
+		, concat(store_addr, ifnull(store_addr_dtl,'')) as store_total_addr
+		, latitude
+		, longitude
+		, come_way
+		, tel_num
+		, closed_date
+		, oper_time
+		, oper_week_time
+		, as_time
+		, parking_yn
+		, treat_yn
+		, cust_desc
+		, notice
+		, store_status
+		, store_due_date
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_store_master
+		<where>
+			<if test="user_grt == '03'">
+				store_type in
+				<foreach collection="store_type_arr" open="(" close=")" separator="," item="store_type_arr" >
+					#{store_type_arr}
+				</foreach>
+			</if>
+		</where>) x
+		where 1=1
+		<include refid="storeListSelect" />
+	</select>
+
+	<resultMap id="setStoreInfo" type="kr.co.msync.web.module.store.model.res.StoreResVO">
+		<result property="store_code" column="STORE_CODE"/>
+		<result property="store_type" column="STORE_TYPE"/>
+		<result property="store_name" column="STORE_NAME"/>
+		<result property="store_addr" column="STORE_ADDR"/>
+		<result property="store_addr_dtl" column="STORE_ADDR_DTL"/>
+		<result property="latitude" column="LATITUDE"/>
+		<result property="longitude" column="LONGITUDE"/>
+		<result property="come_way" column="COME_WAY"/>
+		<result property="tel_num" column="TEL_NUM"/>
+		<result property="closed_date" column="CLOSED_DATE"/>
+		<result property="oper_time" column="OPER_TIME"/>
+		<result property="as_time" column="AS_TIME"/>
+		<result property="parking_yn" column="PARKING_YN"/>
+		<result property="treat_yn" column="TREAT_YN"/>
+		<result property="cust_desc" column="CUST_DESC"/>
+		<result property="notice" column="NOTICE"/>
+		<result property="store_status" column="STORE_STATUS"/>
+		<result property="store_due_date" column="STORE_DUE_DATE"/>
+		<result property="del_yn" column="DEL_YN"/>
+		<result property="reg_id" column="REG_ID"/>
+		<result property="reg_name" column="REG_NAME"/>
+		<result property="reg_date" column="REG_DATE"/>
+		<result property="mod_id" column="MOD_ID"/>
+		<result property="mod_name" column="MOD_NAME"/>
+		<result property="mod_date" column="MOD_DATE"/>
+		<collection property="photo_files" column="STORE_CODE" javaType="java.util.ArrayList" ofType="kr.co.msync.web.module.store.model.res.StoreFileResVO" select="getStorePhotoFile"/>
+		<collection property="sell_device_array" column="STORE_CODE" javaType="java.util.ArrayList" ofType="kr.co.msync.web.module.store.model.res.StoreResVO" select="getStoreSellDevice"/>
+		<collection property="excg_device_array" column="STORE_CODE" javaType="java.util.ArrayList" ofType="kr.co.msync.web.module.store.model.res.StoreResVO" select="getStoreExcgDevice"/>
+		<collection property="service_array" column="STORE_CODE" javaType="java.util.ArrayList" ofType="kr.co.msync.web.module.store.model.res.StoreResVO" select="getStoreService"/>
+	</resultMap>
+
+	<resultMap id="setExcgDeviceInfo" type="kr.co.msync.web.module.store.model.res.StoreResVO">
+		<result property="no_cate" column="NO_CATE"/>
+		<result property="no_device" column="NO_DEVICE"/>
+		<result property="device_name" column="DEVICE_NAME"/>
+		<result property="cate_name" column="CATE_NAME"/>
+		<result property="excg_device_name" column="EXCG_DEVICE_NAME"/>
+		<result property="cnt" column="CNT"/>
+		<result property="store_code" column="STORE_CODE"/>
+		<result property="cate_reg_date" column="CATE_REG_DATE"/>
+		<collection property="color_array" column="{store_code=store_code, no_device=no_device}" javaType="java.util.ArrayList" ofType="kr.co.msync.web.module.store.model.res.StoreResVO" select="getColorList"/>
+	</resultMap>
+
+	<select id="getStoreInfo" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO" resultMap="setStoreInfo">
+		select
+			  store_code
+			, store_type
+			, store_name
+			, store_addr
+			, store_addr_dtl
+			, concat(store_addr, ifnull(store_addr_dtl,'')) as store_total_addr
+			, latitude
+			, longitude
+			, come_way
+			, tel_num
+			, closed_date
+			, oper_time
+			, oper_week_time
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(OPER_WEEK_TIME, ',', 1), ',', -1) as oper_week_time_0
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(OPER_WEEK_TIME, ',', 2), ',', -1) as oper_week_time_1
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(OPER_WEEK_TIME, ',', 3), ',', -1) as oper_week_time_2
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(OPER_WEEK_TIME, ',', 4), ',', -1) as oper_week_time_3
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(OPER_WEEK_TIME, ',', 5), ',', -1) as oper_week_time_4
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(OPER_WEEK_TIME, ',', 6), ',', -1) as oper_week_time_5
+			, SUBSTRING_INDEX(SUBSTRING_INDEX(OPER_WEEK_TIME, ',', 7), ',', -1) as oper_week_time_6
+			, as_time
+			, parking_yn
+			, treat_yn
+			, cust_desc
+			, notice
+			, store_status
+			, store_due_date
+			, retail_store_code
+			, del_yn
+			, reg_id
+			, reg_name
+			, reg_date
+			, mod_id
+			, mod_name
+			, mod_date
+		from tb_store_master
+		WHERE store_code = #{store_code}
+	</select>
+
+	<select id="getStorePhotoFile" resultType="kr.co.msync.web.module.store.model.res.StoreFileResVO">
+		select
+			  no_file
+			, store_code
+			, file_path
+			, origin_name
+			, save_name
+			, file_size
+			, width
+			, height
+			, file_ext
+			, file_sno
+			, reg_id
+			, reg_name
+			, reg_date
+		from tb_store_photo
+		WHERE store_code = #{store_code}
+	</select>
+
+	<select id="getStoreSellDevice" resultType="kr.co.msync.web.module.store.model.res.StoreResVO">
+		SELECT a.no_cate,
+			   (SELECT b.cate_name
+				  FROM tb_category b
+				 WHERE a.no_cate = b.no_cate)
+				  AS cate_name,
+			   a.cate_sno
+		  FROM tb_sell_device_map a
+		 WHERE a.store_code = #{store_code}
+		ORDER BY a.cate_sno ASC
+	</select>
+
+	<select id="getStoreExcgDevice" resultMap="setExcgDeviceInfo">
+		SELECT DISTINCT
+			   c.no_cate,
+			   c.no_device,
+			   c.device_name,
+			   c.cate_name,
+			   concat(c.cate_name, concat(' ', c.device_name)) AS excg_device_name,
+			   (SELECT count(*)
+				  FROM tb_device_color_map b
+				 WHERE c.no_device = b.no_device)
+				  AS color_length,
+			   c.store_code,
+			   c.cate_reg_date
+		  FROM (SELECT a.no_cate,
+					   a.no_device,
+					   (SELECT device_name
+						  FROM tb_device_master b
+						 WHERE a.no_device = b.no_device)
+						  device_name,
+					   (SELECT cate_name
+						  FROM tb_category b
+						 WHERE a.no_cate = b.no_cate)
+						  cate_name,
+                        (SELECT reg_date
+						  FROM tb_category b
+						 WHERE a.no_cate = b.no_cate)
+						  cate_reg_date,
+					   a.no_color,
+					   a.device_qty,
+					   a.store_code
+				  FROM tb_excg_device_map a
+				 WHERE a.store_code = #{store_code}) c
+				 order by c.cate_reg_date desc
+	</select>
+
+	<select id="getColorList" resultType="kr.co.msync.web.module.color.model.res.ColorResVO">
+		 SELECT c.no_device, c.no_color, (select x.color_rgb from tb_device_color x where x.no_color = c.no_color) as color_rgb, (select x.color_name from tb_device_color x where x.no_color = c.no_color) as color_name, c.color_sno, c.limit_yn, c.file_path, c.origin_name, c.save_name, c.file_size, c.WIDTH, c.HEIGHT, c.file_ext, ifnull(d.device_qty,'1') as device_qty, ifnull(d.isMap, 'N') as isMap
+		  FROM (SELECT *
+				  FROM tb_device_color_map a
+				 WHERE EXISTS
+						  (SELECT *
+							 FROM tb_excg_device_map b
+							WHERE     a.no_device = b.no_device
+								  AND b.store_code = #{store_code})) c
+			   LEFT JOIN (SELECT e.store_code, e.no_cate, e.no_device, e.no_color, e.device_qty, 'Y' as isMap
+							FROM tb_excg_device_map e
+						   WHERE e.store_code = #{store_code}) d
+				  ON c.no_device = d.no_device AND c.no_color = d.no_color
+				  where c.no_device = #{no_device}
+				  order by c.color_sno
+	</select>
+
+	<select id="getStoreService" resultType="kr.co.msync.web.module.store.model.res.StoreResVO">
+		SELECT a.no_service,
+			   b.service_name
+		  FROM tb_store_service_map a
+		  LEFT OUTER JOIN tb_service b ON a.no_service = b.no_service
+		  WHERE a.store_code = #{store_code}
+			and b.use_yn = 'Y'
+			and b.del_yn = 'N'
+		ORDER BY a.no_service ASC
+	</select>
+
+	<update id="storeDelAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		UPDATE tb_store_master SET del_yn = 'Y',mod_id = #{mod_id, jdbcType=VARCHAR}, mod_name = #{mod_name, jdbcType=VARCHAR}, mod_date = #{mod_date, jdbcType=VARCHAR}
+		WHERE store_code in <foreach collection="del_store_code" item="store_code" index="index" separator="," open="(" close=")">
+		#{store_code}
+	</foreach>
+	</update>
+
+	<update id="storePastFileDelAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		delete from tb_store_photo
+		WHERE store_code = #{store_code}
+		and no_file not in <foreach collection="no_file_array" item="no_file" index="index" separator="," open="(" close=")">
+		#{no_file}
+	</foreach>
+	</update>
+
+	<select id="getStoreSellDeviceList" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO" resultType="kr.co.msync.web.module.store.model.res.StoreResVO">
+		SELECT x.no_cate,
+		x.cate_name,
+		x.sell_yn,
+		x.del_yn,
+		ifnull(y.isMap, 'Y') AS isMap
+		FROM (SELECT b.no_cate,
+		b.cate_name,
+		b.sell_yn,
+		b.del_yn
+		FROM tb_category b
+		WHERE b.sell_yn = 'Y' AND b.del_yn = 'N') x
+		LEFT OUTER JOIN (SELECT a.no_cate,
+		a.sell_yn,
+		a.del_yn,
+		'N' AS isMap
+		FROM tb_category a
+		where 1=1
+		<if test="selected_sell_no_cate!=null and !selected_sell_no_cate.equals('')">
+			and a.no_cate not in
+			<foreach collection="selected_sell_no_cate" item="no_cate" index="index" separator="," open="(" close=")">
+				#{no_cate}
+			</foreach>
+		</if>
+		and a.sell_yn = 'Y' AND a.del_yn = 'N') y
+		ON x.no_cate = y.no_cate;
+	</select>
+
+	<resultMap id="setExcgDeviceList" type="kr.co.msync.web.module.store.model.res.StoreResVO">
+		<result property="no_cate" column="NO_CATE"/>
+		<result property="no_device" column="NO_DEVICE"/>
+		<result property="device_name" column="DEVICE_NAME"/>
+		<result property="cate_name" column="CATE_NAME"/>
+		<result property="excg_device_name" column="EXCG_DEVICE_NAME"/>
+		<result property="use_yn" column="USE_YN"/>
+		<result property="del_yn" column="DEL_YN"/>
+		<result property="isMap" column="ISMAP"/>
+		<collection property="color_array" column="NO_DEVICE" javaType="java.util.ArrayList" ofType="kr.co.msync.web.module.store.model.res.StoreResVO" select="getDeviceColorList"/>
+	</resultMap>
+
+	<select id="getStoreExcgDeviceList" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO" resultMap="setExcgDeviceList">
+		SELECT x.no_cate,
+		x.no_device,
+		x.device_name,
+		x.cate_name,
+		concat(x.cate_name, concat(' ', x.device_name)) AS excg_device_name,
+		x.use_yn,
+		x.del_yn,
+		ifnull(y.isMap, 'Y') AS isMap
+		FROM (SELECT gx.no_device,
+		gx.no_cate,
+		gx.device_name,
+		gx.cate_name,
+		gx.excg_yn,
+		gx.del_yn,
+		gx.use_yn,
+		'N' AS isMap
+		FROM (SELECT DISTINCT a.no_cate,
+		a.no_device,
+		a.device_name,
+		b.cate_name,
+		b.excg_yn,
+		a.del_yn,
+		a.use_yn,
+		(SELECT count(*)
+		FROM tb_device_color_map c
+		WHERE c.no_device = a.no_device)
+		AS cnt
+		FROM tb_device_master a
+		INNER JOIN tb_category b ON a.no_cate = b.no_cate
+		WHERE a.use_yn = 'Y' AND a.del_yn = 'N' AND b.excg_yn = 'Y')
+		gx
+		WHERE 1 = 1 AND gx.cnt > 0) x
+		LEFT OUTER JOIN
+		(SELECT g.no_device,
+		g.use_yn,
+		g.del_yn,
+		g.cnt,
+		'N' AS isMap
+		FROM (SELECT a.no_device,
+		a.use_yn,
+		a.del_yn,
+		(SELECT count(*)
+		FROM tb_device_color_map b
+		WHERE a.no_device = b.no_device)
+		AS cnt
+		FROM tb_device_master a
+		WHERE 1 = 1
+		<if test="selected_excg_no_device!=null and !selected_excg_no_device.equals('')">
+			and a.no_device not in
+			<foreach collection="selected_excg_no_device" item="no_cate" index="index" separator="," open="(" close=")">
+				#{no_cate}
+			</foreach>
+		</if>
+		AND a.use_yn = 'Y' AND a.del_yn = 'N') g
+		WHERE 1 = 1 AND g.cnt > 0) y
+		ON x.no_device = y.no_device;
+	</select>
+
+	<select id="getDeviceColorList" resultType="kr.co.msync.web.module.color.model.res.ColorResVO">
+		SELECT (SELECT b.color_rgb
+          FROM tb_device_color b
+         WHERE a.no_color = b.no_color)
+          AS color_rgb,
+        (SELECT b.color_name
+        FROM tb_device_color b
+       WHERE a.no_color = b.no_color)
+        AS color_name,
+       		a.no_color
+		FROM tb_device_color_map a
+		WHERE a.no_device = #{no_device}
+		order by a.color_sno
+	</select>
+
+
+	<select id="getOfferServiceList" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO" resultType="kr.co.msync.web.module.store.model.res.StoreResVO">
+		SELECT x.no_service,
+		x.service_name,
+		x.use_yn,
+		x.del_yn,
+		ifnull(y.isMap, 'Y') AS isMap
+		FROM (SELECT b.no_service,
+		b.service_name,
+		b.use_yn,
+		b.del_yn
+		FROM tb_service b
+		WHERE b.use_yn = 'Y' AND b.del_yn = 'N') x
+		LEFT OUTER JOIN (SELECT a.no_service,
+		a.use_yn,
+		a.del_yn,
+		'N' AS isMap
+		FROM tb_service a
+		where 1=1
+		<if test="selected_no_service!=null and !selected_no_service.equals('')">
+			and a.no_service not in
+			<foreach collection="selected_no_service" item="no_service" index="index" separator="," open="(" close=")">
+				#{no_service}
+			</foreach>
+		</if>
+		and a.use_yn = 'Y' AND a.del_yn = 'N') y
+		ON x.no_service = y.no_service;
+	</select>
+
+	<update id="storeRegAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		insert into tb_store_master(
+			  store_code
+			, store_type
+			, store_name
+			, store_addr
+			, store_addr_dtl
+			, latitude
+			, longitude
+			, come_way
+			, tel_num
+			, closed_date
+			, oper_week_time
+			, oper_time
+			, as_time
+			, parking_yn
+			, treat_yn
+			, cust_desc
+			, notice
+			, store_status
+			, store_due_date
+			, retail_store_code
+			, del_yn
+			, reg_id
+			, reg_name
+			, reg_date
+			, mod_id
+			, mod_name
+			, mod_date
+		) values (
+			  #{store_code, jdbcType=VARCHAR}
+			, #{store_type, jdbcType=VARCHAR}
+			, #{store_name, jdbcType=VARCHAR}
+			, #{store_addr, jdbcType=VARCHAR}
+			, #{store_addr_dtl, jdbcType=VARCHAR}
+			, #{latitude, jdbcType=VARCHAR}
+			, #{longitude, jdbcType=VARCHAR}
+			, #{come_way, jdbcType=VARCHAR}
+			, #{tel_num, jdbcType=VARCHAR}
+			, #{closed_date, jdbcType=VARCHAR}
+			, #{oper_week_time, jdbcType=VARCHAR}
+			, #{oper_time, jdbcType=VARCHAR}
+			, #{as_time, jdbcType=VARCHAR}
+			, #{parking_yn, jdbcType=VARCHAR}
+			, #{treat_yn, jdbcType=VARCHAR}
+			, #{cust_desc, jdbcType=VARCHAR}
+			, #{notice, jdbcType=VARCHAR}
+			, #{store_status, jdbcType=VARCHAR}
+			, replace(#{store_due_date, jdbcType=VARCHAR},'-','')
+			, #{retail_store_code, jdbcType=VARCHAR}
+			, #{del_yn, jdbcType=VARCHAR}
+			, #{reg_id, jdbcType=VARCHAR}
+			, #{reg_name, jdbcType=VARCHAR}
+			, #{reg_date, jdbcType=VARCHAR}
+			, #{mod_id, jdbcType=VARCHAR}
+			, #{mod_name, jdbcType=VARCHAR}
+			, #{mod_date, jdbcType=VARCHAR}
+		)
+	</update>
+
+	<update id="storePhotoRegAction" parameterType="kr.co.msync.web.module.store.model.req.StoreFileReqVO">
+		insert into tb_store_photo(
+			  store_code
+			, file_path
+			, origin_name
+			, save_name
+			, file_size
+			, width
+			, height
+			, file_ext
+			, file_sno
+			, reg_id
+			, reg_name
+			, reg_date
+		) values (
+			  #{store_code, jdbcType=VARCHAR}
+			, #{file_path, jdbcType=VARCHAR}
+			, #{origin_name, jdbcType=VARCHAR}
+			, #{save_name, jdbcType=VARCHAR}
+			, #{file_size, jdbcType=VARCHAR}
+			, #{width, jdbcType=VARCHAR}
+			, #{height, jdbcType=VARCHAR}
+			, #{file_ext, jdbcType=VARCHAR}
+			, #{file_sno, jdbcType=VARCHAR}
+			, #{reg_id, jdbcType=VARCHAR}
+			, #{reg_name, jdbcType=VARCHAR}
+			, #{reg_date, jdbcType=VARCHAR}
+			)
+	</update>
+
+	<update id="storeModAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		update tb_store_master set
+			  store_type = #{store_type, jdbcType=VARCHAR}
+			, store_name = #{store_name, jdbcType=VARCHAR}
+			, store_addr = #{store_addr, jdbcType=VARCHAR}
+			, store_addr_dtl = #{store_addr_dtl, jdbcType=VARCHAR}
+			, latitude = #{latitude, jdbcType=VARCHAR}
+			, longitude = #{longitude, jdbcType=VARCHAR}
+			, come_way = #{come_way, jdbcType=VARCHAR}
+			, tel_num = #{tel_num, jdbcType=VARCHAR}
+			, closed_date = #{closed_date, jdbcType=VARCHAR}
+			, oper_week_time = #{oper_week_time, jdbcType=VARCHAR}
+			, oper_time = #{oper_time, jdbcType=VARCHAR}
+			, as_time = #{as_time, jdbcType=VARCHAR}
+			, parking_yn = #{parking_yn, jdbcType=VARCHAR}
+			, treat_yn = #{treat_yn, jdbcType=VARCHAR}
+			, cust_desc = #{cust_desc, jdbcType=VARCHAR}
+			, notice = #{notice, jdbcType=VARCHAR}
+			, store_status = #{store_status, jdbcType=VARCHAR}
+			, store_due_date = replace(#{store_due_date, jdbcType=VARCHAR},'-','')
+			, retail_store_code = #{retail_store_code, jdbcType=VARCHAR}
+			, mod_id = #{mod_id, jdbcType=VARCHAR}
+			, mod_name = #{mod_name, jdbcType=VARCHAR}
+			, mod_date = #{mod_date, jdbcType=VARCHAR}
+		where store_code = #{store_code, jdbcType=VARCHAR}
+	</update>
+
+	<update id="storeSellDeviceRegAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		insert into tb_sell_device_map(store_code, no_cate, cate_sno, device_qty) values (#{store_code}, #{no_cate}, #{cate_sno}, #{device_qty})
+	</update>
+
+	<update id="storeExcgDeviceRegAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		insert into tb_excg_device_map(store_code, no_cate, no_device, no_color, device_qty) values (#{store_code}, #{no_cate}, #{no_device}, #{no_color}, #{device_qty})
+	</update>
+
+	<update id="storeServiceRegAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		insert into tb_store_service_map(no_service, store_code) values (#{no_service}, #{store_code})
+	</update>
+
+	<update id="storeAllParkingModAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		UPDATE tb_store_master SET PARKING_YN = #{parking_yn}, MOD_ID = #{mod_id}, MOD_NAME = #{mod_name}, MOD_DATE = #{mod_date}
+		WHERE store_code in <foreach collection="store_code_array" item="store_code" index="index" separator="," open="(" close=")">
+		#{store_code}
+	</foreach>
+	</update>
+
+	<update id="storeAllTreatModAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		UPDATE tb_store_master SET TREAT_YN = #{treat_yn}, MOD_ID = #{mod_id}, MOD_NAME = #{mod_name}, MOD_DATE = #{mod_date}
+		WHERE store_code in <foreach collection="store_code_array" item="store_code" index="index" separator="," open="(" close=")">
+		#{store_code}
+	</foreach>
+	</update>
+
+	<update id="storeAllStatusModAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		UPDATE tb_store_master SET STORE_STATUS = #{store_status}, STORE_DUE_DATE = replace(#{store_due_date, jdbcType=VARCHAR},'-',''), MOD_ID = #{mod_id}, MOD_NAME = #{mod_name}, MOD_DATE = #{mod_date}
+		WHERE store_code in <foreach collection="store_code_array" item="store_code" index="index" separator="," open="(" close=")">
+		#{store_code}</foreach>
+	</update>
+
+	<update id="storeAllOperTimeModAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		UPDATE tb_store_master SET OPER_WEEK_TIME = #{oper_week_time}, MOD_ID = #{mod_id}, MOD_NAME = #{mod_name}, MOD_DATE = #{mod_date}
+		WHERE store_code in <foreach collection="store_code_array" item="store_code" index="index" separator="," open="(" close=")">
+		#{store_code}
+	</foreach>
+	</update>
+
+	<update id="storeAllStoreOperTimeModAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		UPDATE tb_store_master SET OPER_TIME = #{oper_time}, MOD_ID = #{mod_id}, MOD_NAME = #{mod_name}, MOD_DATE = #{mod_date}
+		WHERE store_code in <foreach collection="store_code_array" item="store_code" index="index" separator="," open="(" close=")">
+		#{store_code}
+	</foreach>
+	</update>
+
+	<update id="storeAllClosedDateModAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		UPDATE tb_store_master SET CLOSED_DATE = #{closed_date}, MOD_ID = #{mod_id}, MOD_NAME = #{mod_name}, MOD_DATE = #{mod_date}
+		WHERE store_code in
+		<foreach collection="store_code_array" item="store_code" index="index" separator="," open="(" close=")">
+			#{store_code}
+		</foreach>
+	</update>
+
+	<update id="updateStoreModDateUpdate" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		UPDATE tb_store_master SET MOD_ID = #{mod_id}, MOD_NAME = #{mod_name}, MOD_DATE = #{mod_date}
+		WHERE store_code in
+		<foreach collection="store_code_array" item="store_code" index="index" separator="," open="(" close=")">
+			#{store_code}
+		</foreach>
+	</update>
+
+	<delete id="storeAllSellDeviceDelAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		delete from tb_sell_device_map where store_code = #{store_code}
+	</delete>
+
+	<delete id="storeAllExcgDeviceDelAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		delete from tb_excg_device_map where store_code = #{store_code}
+	</delete>
+
+	<delete id="storeAllServiceDelAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		delete from tb_store_service_map where store_code = #{store_code}
+	</delete>
+
+	<update id="storeAllSellDeviceModAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		insert into tb_sell_device_map(store_code, no_cate, cate_sno, device_qty) values (#{store_code}, #{no_cate}, #{cate_sno}, #{device_qty})
+	</update>
+
+	<update id="storeAllExcgDeviceModAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		insert into tb_excg_device_map(store_code, no_cate, no_device, no_color, device_qty) values (#{store_code}, #{no_cate}, #{no_device}, #{no_color}, #{device_qty})
+	</update>
+
+	<update id="storeAllServiceModAction" parameterType="kr.co.msync.web.module.store.model.req.StoreReqVO">
+		insert into tb_store_service_map(no_service, store_code) values (#{no_service}, #{store_code})
+	</update>
+
+	<select id="getStoreSyncDate" resultType="String">
+		select max(sync_date) from tb_sync
+	</select>
+
+	<select id="getMaxModStore" resultType="String">
+		select max(mod_date) from tb_store_master
+	</select>
+
+	<select id="getMaxRegStore" resultType="String">
+		select max(reg_date) from tb_store_master
+	</select>
+
+	<select id="storeRetailCodeCnt" resultType="Integer" parameterType="java.util.Map">
+		select count(*) from tb_store_master
+		where retail_store_code = #{retail_store_code}
+		<if test="store_code!=null and !store_code.equals('')">
+			AND store_code != #{store_code}
+		</if>
+	</select>
+
+	<select id="storeDeviceColorCnt" resultType="Integer" parameterType="java.util.Map">
+		SELECT count(*)
+		FROM   (SELECT a.no_cate,
+					   a.no_device
+				FROM   tb_device_master a
+				WHERE  a.use_yn = 'Y'
+				  AND  a.del_yn = 'N') x
+				   LEFT OUTER JOIN (SELECT b.no_device,
+										   b.no_color
+									FROM   tb_device_color_map b) y
+								   ON x.no_device = y.no_device
+		WHERE  x.no_cate = #{no_cate}
+		  AND  x.no_device = #{no_device}
+		  AND  y.no_color = #{no_color}
+	</select>
+
+	<select id="getServiceList" resultType="java.util.Map">
+		SELECT no_service
+		FROM   tb_service
+		WHERE  use_yn = 'Y'
+		  AND  del_yn = 'N'
+	</select>
+	<select id="getColorCodeList" resultType="java.util.Map">
+		SELECT no_color,
+			   color_name,
+			   color_rgb
+		FROM   tb_device_color
+		WHERE  use_yn = 'Y'
+		  AND del_yn = 'N'
+		ORDER  BY no_color ASC
+	</select>
+</mapper>

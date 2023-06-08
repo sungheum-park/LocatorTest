@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-4.1.xsd">
+
+    <!-- 로그인 핸들러 -->
+    <beans:bean class="kr.co.msync.web.module.security.CustomUserDetailsService" id="customUserDetailsService"/>
+
+    <!-- Password Encoder -->
+    <beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+        <beans:constructor-arg name="strength" value="256"></beans:constructor-arg>
+    </beans:bean>
+
+    <!-- 로그인 권한 확인 -->
+    <beans:bean class="org.springframework.security.authentication.dao.DaoAuthenticationProvider" id="authenticationProvider">
+        <beans:property name="userDetailsService" ref="customUserDetailsService" />
+        <beans:property name="hideUserNotFoundExceptions" value="false" />
+        <beans:property name="passwordEncoder" ref="passwordEncoder" />
+    </beans:bean>
+
+    <!-- 로그인 성공시 핸들러 -->
+    <beans:bean id="customAuthenticationSuccessHandler" class="kr.co.msync.web.module.security.CustomAuthenticationSuccessHandler"/>
+
+    <!-- 로그인 실패시 핸들러 -->
+    <beans:bean id="customAuthenticationFailureHandler" class="kr.co.msync.web.module.security.CustomAuthenticationFailureHandler">
+        <beans:property name="loginFailureLimit" value="5" />
+    </beans:bean>
+
+    <!-- 로그아웃 핸들러 -->
+    <beans:bean id="customLogoutHandler" class="kr.co.msync.web.module.security.CustomLogoutHandler"/>
+
+    <http auto-config="true" use-expressions="true" authentication-manager-ref="authenticationManager">
+        <csrf disabled="true"/>
+
+        <access-denied-handler error-page="/user/admin/login" />
+
+        <intercept-url pattern="/resources/**" access="permitAll" />
+        <intercept-url pattern="/user/admin/login" access="permitAll" />
+
+        <!--<intercept-url pattern="/*/admin/**" access="hasAnyRole('ROLE_ADMIN,ROLE_MANAGER,ROLE_USER')" />-->
+
+        <intercept-url pattern="/cate/admin/*" access="hasAnyRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/color/admin/*" access="hasAnyRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/device/admin/*" access="hasAnyRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/hist/admin/*" access="hasAnyRole('ROLE_ADMIN,ROLE_MANAGER')" />
+        <intercept-url pattern="/notice/admin/*" access="hasAnyRole('ROLE_ADMIN,ROLE_MANAGER')" />
+        <intercept-url pattern="/service/admin/*" access="hasAnyRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/store/admin/store*" access="hasAnyRole('ROLE_ADMIN,ROLE_USER')" />
+        <intercept-url pattern="/store/admin/storeAll*" access="hasAnyRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/survey/admin/*" access="hasAnyRole('ROLE_ADMIN,ROLE_MANAGER')" />
+        <intercept-url pattern="/statis/admin/*" access="hasAnyRole('ROLE_ADMIN,ROLE_MANAGER')" />
+        <intercept-url pattern="/user/admin/userModForm" access="hasAnyRole('ROLE_ADMIN,ROLE_MANAGER,ROLE_USER')" />
+        <intercept-url pattern="/user/admin/userModAction" access="hasAnyRole('ROLE_ADMIN,ROLE_MANAGER,ROLE_USER')" />
+        <intercept-url pattern="/user/admin/user*" access="hasAnyRole('ROLE_ADMIN,ROLE_MANAGER')" />
+
+        <form-login login-page="/user/admin/login" login-processing-url="/user/admin/loginAction"
+                    username-parameter="login_id" password-parameter="password"
+                    authentication-success-handler-ref="customAuthenticationSuccessHandler"
+                    authentication-failure-handler-ref="customAuthenticationFailureHandler"/>
+
+        <logout invalidate-session="true" logout-url="/user/admin/logout" success-handler-ref="customLogoutHandler"/>
+
+    </http>
+
+    <!-- provider -->
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider ref="authenticationProvider"/>
+    </authentication-manager>
+
+</beans:beans>

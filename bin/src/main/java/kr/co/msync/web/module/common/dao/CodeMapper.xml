@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.common.dao.CodeMapper">
+
+	<select id="getCodeList" parameterType="kr.co.msync.web.module.common.model.req.CodeReqVO" resultType="kr.co.msync.web.module.common.model.res.CodeResVO">
+		SELECT *
+		  FROM tb_com_code
+		 WHERE CODE_GROUP = #{code_group, jdbcType=VARCHAR}
+		   AND USE_YN = #{use_yn, jdbcType=VARCHAR}
+	     ORDER BY CODE_SNO ASC
+	</select>
+
+	<select id="getCodeName" parameterType="kr.co.msync.web.module.common.model.req.CodeReqVO" resultType="String">
+		SELECT code_name
+		  FROM tb_com_code
+		 WHERE CODE_GROUP = #{code_group, jdbcType=VARCHAR}
+		   AND CODE_VALUE = #{code_value, jdbcType=VARCHAR}
+	     ORDER BY CODE_SNO ASC
+	</select>
+
+	<select id="getCodeNameByTable" parameterType="kr.co.msync.web.module.common.model.req.CodeReqVO" resultType="kr.co.msync.web.module.common.model.res.CodeResVO">
+		select ${column_name} as column_name
+		, ${column_pk} as column_pk
+		from ${table_name}
+		where del_yn = #{del_yn, jdbcType=VARCHAR}
+	</select>
+</mapper>

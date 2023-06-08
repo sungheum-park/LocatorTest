@@ -1,0 +1,123 @@
+@charset "utf-8";
+/*
+* File       : common.css
+* Author     : m-sync ( kimkyungran)
+*
+* SUMMARY:
+* 1) 로그인 페이지
+*/
+
+
+/* 
+**  1) 로그인페이지///
+*/ 
+
+#main {
+    position:relative;
+    width:100%;
+    height:100vh;
+    background-color: #e9e9e9; 
+    text-align: center;
+}
+#main .login {
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    margin-top:30px;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+}
+#main .login .title {    
+    margin-bottom: 64px;
+}
+#main .login .title span{
+    position:relative;
+    padding: 0 13px;
+    color: #7d7d7d;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.069em;
+}
+#main .login .title span:before, #main .login .title span:after {
+    content:'';
+    top:50%;
+    position:absolute;
+    width: 3px;
+    height: 22px;
+    background-color: #7d7d7d;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+}
+#main .login .title span:before {
+    left: 0;
+}
+#main .login .title span:after {
+    right: 0;
+}
+
+#main .login .login_wrap {
+    padding: 35px;
+    width: 390px;
+    height: 425px;
+    background-color: #fff;
+}
+#main .login_wrap .title {
+    text-align: left;
+}
+#main .login_wrap .title h1 {
+    color:#7d7d7d;
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.069em;
+    line-height: 42px
+}
+
+#main .input_wrap{
+    margin-bottom: 40px;
+    width: 100%;
+}
+#main .input_wrap input {
+    display: block;
+    margin-bottom: 20px;
+    padding: 12px 15px;
+    width: 100%;
+    height: 40px;
+    border:1px solid #bfbfbf !important;
+}
+#main .input_wrap input::placeholder {
+    color: #b7b7b7;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.069em;
+}
+#main .login_btn {
+    background-color: #7d7d7d;
+}
+#main .login_btn a {
+    display: block;
+    width: 100%;
+    height:48px;
+    color:#fff;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.069em;
+    line-height: 48px;
+}
+#main .login .logo {
+    margin-top: 200px;
+}
+#main .login .logo .copyright {
+    margin-top: 12px;
+}
+#main .login .logo .copyright p {
+    color:#7d7d7d;
+    font-size: 13px;
+    font-family: 'Roboto',sans-serif;
+    letter-spacing: 0;
+}

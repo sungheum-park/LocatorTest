@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.device.dao.DeviceMapper">
+
+	<sql id="deviceListSelect">
+		<if test="no_cate!=null and !no_cate.equals('')">
+			AND x.no_cate = #{no_cate, jdbcType=VARCHAR}
+		</if>
+		<if test="cate_name!=null and !cate_name.equals('')">
+			AND x.cate_name LIKE REPLACE(CONCAT('%',#{cate_name},'%'),' ','')
+		</if>
+		<if test="no_device!=null and !no_device.equals('')">
+			AND x.no_device = #{no_device, jdbcType=VARCHAR}
+		</if>
+		<if test="device_name!=null and !device_name.equals('')">
+			AND x.device_name LIKE REPLACE(CONCAT('%',#{device_name},'%'),' ','')
+		</if>
+		<if test="use_yn!=null and !use_yn.equals('')">
+			AND x.use_yn = #{use_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="del_yn!=null and !del_yn.equals('')">
+			AND x.del_yn = #{del_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_id!=null and !reg_id.equals('')">
+			AND x.reg_id = #{reg_id, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_name!=null and !reg_name.equals('')">
+			AND x.reg_name LIKE REPLACE(CONCAT('%',#{reg_name},'%'),' ','')
+		</if>
+		<if test="reg_date_start!=null and !reg_date_start.equals('')">
+			AND substring(x.reg_date,1,8) >= replace(#{reg_date_start},'-','')
+		</if>
+		<if test="reg_date_end!=null and !reg_date_end.equals('')">
+			AND substring(x.reg_date,1,8) &lt;= replace(#{reg_date_end},'-','')
+		</if>
+		<if test="mod_id!=null and !mod_id.equals('')">
+			AND x.mod_id = #{mod_id, jdbcType=VARCHAR}
+		</if>
+		<if test="mod_name!=null and !mod_name.equals('')">
+			AND x.mod_name LIKE REPLACE(CONCAT('%',#{mod_name},'%'),' ','')
+		</if>
+		<if test="mod_date_start!=null and !mod_date_start.equals('')">
+			AND substring(x.mod_date,1,8) >= replace(#{mod_date_start},'-','')
+		</if>
+		<if test="mod_date_end!=null and !mod_date_end.equals('')">
+			AND substring(x.mod_date,1,8) &lt;= replace(#{mod_date_end},'-','')
+		</if>
+	</sql>
+
+	<sql id="deviceFileUpdate">
+		<if test="file_path!=null and !file_path.equals('')">
+			, file_path = #{file_path, jdbcType=VARCHAR}
+		</if>
+		<if test="origin_name!=null and !origin_name.equals('')">
+			, origin_name = #{origin_name, jdbcType=VARCHAR}
+		</if>
+		<if test="save_name!=null and !save_name.equals('')">
+			, save_name = #{save_name, jdbcType=VARCHAR}
+		</if>
+		<if test="file_size!=null and !file_size.equals('')">
+			, file_size = #{file_size, jdbcType=VARCHAR}
+		</if>
+		<if test="width!=null and !width.equals('')">
+			, width = #{width, jdbcType=VARCHAR}
+		</if>
+		<if test="height!=null and !height.equals('')">
+			, height = #{height, jdbcType=VARCHAR}
+		</if>
+		<if test="file_ext!=null and !file_ext.equals('')">
+			, file_ext = #{file_ext, jdbcType=VARCHAR}
+		</if>
+	</sql>
+
+	<select id="getDeviceExcelList" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO" resultType="kr.co.msync.web.module.device.model.res.DeviceResVO">
+		select
+		y.no_device
+		, (select cate_name from tb_category b where b.no_cate = y.no_cate) as cate_name
+		, y.device_name
+		, (select group_concat(a.color_name order by b.no_color asc separator ', ') from tb_device_color a join tb_device_color_map b where a.no_color = b.no_color and b.no_device = y.no_device) as color_name_array
+		, y.file_path
+		, y.origin_name
+		, y.save_name
+		, y.file_size
+		, y.width
+		, y.height
+		, y.file_ext
+		, getCodeName("use_yn", y.use_yn) as use_yn
+		, getCodeName("del_yn", y.del_yn) as del_yn
+		, y.reg_id
+		, y.reg_name
+		, y.reg_date
+		, y.mod_id
+		, y.mod_name
+		, y.mod_date
+		from (select
+		x.no_device
+		, x.no_cate
+		, x.device_name
+		, x.file_path
+		, x.origin_name
+		, x.save_name
+		, x.file_size
+		, x.width
+		, x.height
+		, x.file_ext
+		, x.use_yn
+		, x.del_yn
+		, x.reg_id
+		, x.reg_name
+		, x.reg_date
+		, x.mod_id
+		, x.mod_name
+		, x.mod_date
+		from tb_device_master x
+		where 1=1
+		<include refid="deviceListSelect" />
+		) y
+		ORDER BY ${order_column} ${order_type}
+	</select>
+
+	<select id="getDeviceList" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO" resultType="kr.co.msync.web.module.device.model.res.DeviceResVO">
+		select
+		x.no_device
+		, x.no_cate
+		, x.cate_name
+		, x.device_name
+		, x.file_path
+		, x.origin_name
+		, x.save_name
+		, x.file_size
+		, x.width
+		, x.height
+		, x.file_ext
+		, x.use_yn
+		, x.del_yn
+		, x.reg_id
+		, x.reg_name
+		, x.reg_date
+		, x.mod_id
+		, x.mod_name
+		, x.mod_date
+		from (select
+		no_device
+		, no_cate
+		, (select a.cate_name from tb_category a where a.no_cate = b.no_cate) as cate_name
+		, device_name
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_device_master b) x
+		where 1=1
+		<include refid="deviceListSelect" />
+		ORDER BY ${order_column} ${order_type}
+		limit #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="getDeviceListCnt" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO" resultType="int">
+		select
+		count(*) cnt
+		from (select
+		no_device
+		, no_cate
+		, (select a.cate_name from tb_category a where a.no_cate = b.no_cate) as cate_name
+		, device_name
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_device_master b) x
+		where 1=1
+		<include refid="deviceListSelect" />
+	</select>
+
+	<resultMap id="setDeviceInfo" type="kr.co.msync.web.module.device.model.res.DeviceResVO">
+		<result property="no_device" column="NO_DEVICE"/>
+		<result property="no_cate" column="NO_CATE"/>
+		<result property="cate_name" column="CATE_NAME"/>
+		<result property="device_name" column="DEVICE_NAME"/>
+		<result property="file_path" column="FILE_PATH"/>
+		<result property="origin_name" column="ORIGIN_NAME"/>
+		<result property="save_name" column="SAVE_NAME"/>
+		<result property="file_size" column="FILE_SIZE"/>
+		<result property="width" column="WIDTH"/>
+		<result property="height" column="HEIGHT"/>
+		<result property="file_ext" column="FILE_EXT"/>
+		<result property="use_yn" column="USE_YN"/>
+		<result property="del_yn" column="DEL_YN"/>
+		<result property="reg_id" column="REG_ID"/>
+		<result property="reg_name" column="REG_NAME"/>
+		<result property="reg_date" column="REG_DATE"/>
+		<result property="mod_id" column="MOD_ID"/>
+		<result property="mod_name" column="MOD_NAME"/>
+		<result property="mod_date" column="MOD_DATE"/>
+		<collection property="map_array" column="NO_DEVICE" javaType="java.util.ArrayList" ofType="kr.co.msync.web.module.color.model.res.ColorResVO" select="getDeviceColorMapList"/>
+	</resultMap>
+
+	<select id="getDeviceInfo" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO" resultMap="setDeviceInfo">
+		select
+			  no_device
+			, no_cate
+			, (select a.cate_name from tb_category a where a.no_cate = b.no_cate) as cate_name
+			, device_name
+			, file_path
+			, origin_name
+			, save_name
+			, file_size
+			, width
+			, height
+			, file_ext
+			, use_yn
+			, del_yn
+			, reg_id
+			, reg_name
+			, reg_date
+			, mod_id
+			, mod_name
+			, mod_date
+		from tb_device_master b
+		WHERE no_device = #{no_device}
+	</select>
+
+	<select id="getDeviceColorMapList" resultType="kr.co.msync.web.module.color.model.res.ColorResVO">
+		select a.no_device
+		      , a.no_color
+		      , (select b.color_name from tb_device_color b where a.no_color = b.no_color) as color_name
+		      , (select b.color_rgb from tb_device_color b where a.no_color = b.no_color) as color_rgb
+		      , a.color_sno
+		      , a.limit_yn
+		      , a.file_path
+		      , a.origin_name
+		      , a.save_name
+		      , a.file_size
+		      , a.width
+		      , a.height
+		      , a.file_ext
+		      from tb_device_color_map a
+		      where no_device = #{no_device}
+		      order by a.color_sno
+	</select>
+
+	<update id="deviceDelAction" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO">
+		UPDATE tb_device_master SET del_yn = 'Y', MOD_ID = #{mod_id}, MOD_NAME = #{mod_name}, MOD_DATE = #{mod_date}
+		WHERE no_device in
+		<foreach collection="del_no_device" item="no_device" index="index" separator="," open="(" close=")">
+			#{no_device}
+		</foreach>
+	</update>
+
+	<update id="deviceColorMapDelAction" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO">
+		delete from tb_device_color_map
+		WHERE no_device in
+		<foreach collection="del_no_device" item="no_device" index="index" separator="," open="(" close=")">
+			#{no_device}
+		</foreach>
+	</update>
+
+	<update id="deviceExcgDeviceMapDelAction" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO">
+		delete from tb_excg_device_map
+		WHERE no_device in
+		<foreach collection="del_no_device" item="no_device" index="index" separator="," open="(" close=")">
+			#{no_device}
+		</foreach>
+	</update>
+
+	<update id="deviceNoMapDelAction" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO">
+		delete from tb_device_color_map
+		WHERE no_device = #{no_device} and no_color not in
+		<foreach collection="selected_no_color" item="no_color" index="index" separator="," open="(" close=")">
+			#{no_color}
+		</foreach>
+	</update>
+
+	<update id="updateDeviceColorMapSno" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO">
+		update tb_device_color_map set limit_yn = #{limit_yn}, color_sno = #{color_sno} where no_device = #{no_device} and no_color = #{no_color}
+	</update>
+
+	<select id="getDeviceColorList" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO" resultType="kr.co.msync.web.module.device.model.res.DeviceResVO">
+		SELECT x.no_color,
+		x.color_name,
+		x.color_rgb,
+		x.use_yn,
+		x.del_yn,
+		ifnull(y.isMap, 'Y') AS isMap
+		FROM (SELECT b.no_color,
+		b.color_name,
+		b.color_rgb,
+		b.color_sno,
+		b.use_yn,
+		b.del_yn
+		FROM tb_device_color b
+		WHERE b.use_yn = 'Y' AND b.del_yn = 'N') x
+		LEFT OUTER JOIN (SELECT a.no_color,
+		a.use_yn,
+		a.del_yn,
+		'N' AS isMap
+		FROM tb_device_color a
+		where 1=1
+		<if test="selected_no_color!=null and !selected_no_color.equals('')">
+			and a.no_color not in
+			<foreach collection="selected_no_color" item="no_color" index="index" separator="," open="(" close=")">
+				#{no_color}
+			</foreach>
+		</if>
+		and a.use_yn = 'Y' AND a.del_yn = 'N') y
+		ON x.no_color = y.no_color
+	</select>
+
+	<update id="deviceRegAction" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO">
+		insert into tb_device_master
+			(
+				no_device
+			  , no_cate
+			  , device_name
+			  , file_path
+			  , origin_name
+			  , save_name
+			  , file_size
+			  , width
+			  , height
+			  , file_ext
+			  , use_yn
+			  , del_yn
+			  , reg_id
+			  , reg_name
+			  , reg_date
+			) values (
+				#{no_device, jdbcType=VARCHAR}
+			  , #{no_cate, jdbcType=VARCHAR}
+			  , #{device_name, jdbcType=VARCHAR}
+			  , #{file_path, jdbcType=VARCHAR}
+			  , #{origin_name, jdbcType=VARCHAR}
+			  , #{save_name, jdbcType=VARCHAR}
+			  , #{file_size, jdbcType=VARCHAR}
+			  , #{width, jdbcType=VARCHAR}
+			  , #{height, jdbcType=VARCHAR}
+			  , #{file_ext, jdbcType=VARCHAR}
+			  , #{use_yn, jdbcType=VARCHAR}
+			  , #{del_yn, jdbcType=VARCHAR}
+			  , #{reg_id, jdbcType=VARCHAR}
+			  , #{reg_name, jdbcType=VARCHAR}
+			  , #{reg_date, jdbcType=VARCHAR}
+			)
+	</update>
+
+	<update id="deviceModAction" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO">
+		update tb_device_master set
+			no_cate = #{no_cate, jdbcType=VARCHAR}
+		  , device_name = #{device_name, jdbcType=VARCHAR}
+		  , use_yn = #{use_yn, jdbcType=VARCHAR}
+		  <include refid="deviceFileUpdate" />
+		  , mod_id = #{mod_id, jdbcType=VARCHAR}
+		  , mod_name = #{mod_name, jdbcType=VARCHAR}
+		  , mod_date = #{mod_date, jdbcType=VARCHAR}
+		where no_device = #{no_device, jdbcType=VARCHAR}
+	</update>
+
+	<update id="deviceColorMapRegAction" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO">
+		insert into tb_device_color_map
+			(
+				no_device
+			  , no_color
+			  , color_sno
+			  , limit_yn
+			  , file_path
+			  , origin_name
+			  , save_name
+			  , file_size
+			  , width
+			  , height
+			  , file_ext
+			) values (
+				#{no_device, jdbcType=VARCHAR}
+			  , #{no_color, jdbcType=VARCHAR}
+			  , #{color_sno, jdbcType=VARCHAR}
+			  , #{limit_yn, jdbcType=VARCHAR}
+			  , #{file_path, jdbcType=VARCHAR}
+			  , #{origin_name, jdbcType=VARCHAR}
+			  , #{save_name, jdbcType=VARCHAR}
+			  , #{file_size, jdbcType=VARCHAR}
+			  , #{width, jdbcType=VARCHAR}
+			  , #{height, jdbcType=VARCHAR}
+			  , #{file_ext, jdbcType=VARCHAR}
+			)
+	</update>
+
+	<update id="deviceColorMapModAction" parameterType="kr.co.msync.web.module.device.model.req.DeviceReqVO">
+		insert into tb_device_color_map values (
+			#{no_device, jdbcType=VARCHAR}
+		  , #{no_color, jdbcType=VARCHAR}
+		  , #{color_sno, jdbcType=VARCHAR}
+		  , #{limit_yn, jdbcType=VARCHAR}
+		  , #{file_path, jdbcType=VARCHAR}
+		  , #{origin_name, jdbcType=VARCHAR}
+		  , #{save_name, jdbcType=VARCHAR}
+		  , #{file_size, jdbcType=VARCHAR}
+		  , #{width, jdbcType=VARCHAR}
+		  , #{height, jdbcType=VARCHAR}
+		  , #{file_ext, jdbcType=VARCHAR})
+		  on duplicate key update
+		    color_sno = #{color_sno, jdbcType=VARCHAR}
+		  , limit_yn = #{limit_yn, jdbcType=VARCHAR}
+		  , file_path = #{file_path, jdbcType=VARCHAR}
+		  , origin_name = #{origin_name, jdbcType=VARCHAR}
+		  , save_name = #{save_name, jdbcType=VARCHAR}
+		  , file_size = #{file_size, jdbcType=VARCHAR}
+		  , width = #{width, jdbcType=VARCHAR}
+		  , height = #{height, jdbcType=VARCHAR}
+		  , file_ext = #{file_ext, jdbcType=VARCHAR}
+	</update>
+</mapper>

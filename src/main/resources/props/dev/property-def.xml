@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties version="1.0">
+	<!--dev-->
+	<entry key="profiles.profile.id">dev</entry>
+
+	<!--DB-->
+	<entry key="jdbc.driverClassName">com.mysql.jdbc.Driver</entry>
+	<entry key="jdbc.url">jdbc:mysql://krsc-qa.crr61xjomt25.ap-northeast-1.rds.amazonaws.com:3400/krscqa?serverTimezone=UTC</entry>
+	<entry key="jdbc.username">msyncqas</entry>
+	<entry key="jdbc.password">T65)W2Mt&lt;sV+</entry>
+
+	<!-- 프로젝트 기본정보 -->
+	<entry key="characterSet">UTF-8</entry>
+	<entry key="site.url">https://qa.iqossvc.kr</entry>
+	<entry key="site.check.referer">x</entry>
+
+	<!-- 프로젝트 정적 리소스 기본 경로 -->
+	<entry key="css.path">/resources/css</entry>
+	<entry key="image.path">/resources/images</entry>
+	<entry key="front.image.path">/resources/front/images</entry>
+	<entry key="js.path">/resources/js</entry>
+
+	<!-- 파일업로드 기본경로 -->
+	<entry key="default.upload.path"></entry>
+
+	<!--이메일 발송-->
+	<entry key="mail.host">localhost</entry>
+	<entry key="mail.port">25</entry>
+	<entry key="mail.username"></entry>
+	<entry key="mail.password"></entry>
+	<entry key="mail.secret">false</entry>
+
+	<!--카카오 맵 호출-->
+	<!--<entry key="api.kakao.authKey">bfcad5c9e0ad61adb2893076a1a63e4c</entry>-->
+	<entry key="api.kakao.authKey">d2236973e55a03b233bd3a8e09081e42</entry>
+
+	<!--카카오 REST API Key-->
+	<entry key="api.kakao.rest.url">https://dapi.kakao.com/v2</entry>
+	<!--<entry key="api.kakao.rest.authKey">0a82dc6e844b788ce5b74aac3f1824d9</entry>-->
+	<entry key="api.kakao.rest.authKey">36f6a88a9d896238ee8e93e5981ae683</entry>
+
+	<!-- 카카오 링크 -->
+	<entry key="share.kakao.link.main.image">https://qa.iqossvc.kr/resources/front/images/share/kakao_link_share.jpg</entry>
+	<entry key="share.kakao.image">https://qa.iqossvc.kr/resources/front/images/share/kakao_share.jpg</entry>
+	<entry key="share.link.url">https://qa.iqossvc.kr/main?store_code=</entry>
+
+	<!-- SMS(다날) -->
+	<entry key="sms.danal.send.able.count">5</entry>
+	<entry key="sms.danal.url">https://cmgtest.danal.co.kr</entry>
+	<entry key="sms.danal.port">443</entry>
+	<entry key="sms.danal.apiKey">6693591730fe948e72fa0c207b01999bf990693346d9c2c74975dd558a99fea5</entry>
+	<entry key="sms.danal.apiSecret">eer3!jdnx@#</entry>
+
+	<!-- aws s3 호출-->
+	<entry key="aws.bucket.name"></entry>
+	<entry key="aws.access.key"></entry>
+	<entry key="aws.secret.key"></entry>
+
+</properties>

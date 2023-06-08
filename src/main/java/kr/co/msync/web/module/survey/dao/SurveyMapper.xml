@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.survey.dao.SurveyMapper">
+
+	<sql id="surveyListSelect">
+		<if test="device_type!=null and !device_type.equals('')">
+			AND device_type = #{device_type, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_date_start!=null and !reg_date_start.equals('')">
+			AND substring(reg_date,1,8) >= replace(#{reg_date_start},'-','')
+		</if>
+		<if test="reg_date_end!=null and !reg_date_end.equals('')">
+			AND substring(reg_date,1,8) &lt;= replace(#{reg_date_end},'-','')
+		</if>
+	</sql>
+
+	<select id="getSurveyList" parameterType="kr.co.msync.web.module.survey.model.req.SurveyReqVO" resultType="kr.co.msync.web.module.survey.model.res.SurveyResVO">
+		select
+		id,
+		ip_addr,
+		score,
+		device_type,
+		reg_date
+		from tb_survey
+		where 1=1
+		<include refid="surveyListSelect" />
+		ORDER BY ${order_column} ${order_type}
+		limit #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="getSurveyListCnt" parameterType="kr.co.msync.web.module.survey.model.req.SurveyReqVO" resultType="int">
+		select
+		count(*) cnt
+		from tb_survey
+		where 1=1
+		<include refid="surveyListSelect" />
+	</select>
+
+</mapper>

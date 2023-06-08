@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="그룹_302" data-name="그룹 302" transform="translate(-59 -480)">
+    <rect id="Content" width="20" height="20" transform="translate(59 480)" fill="none"/>
+    <g id="그룹_301" data-name="그룹 301" transform="translate(61.187 481.062)">
+      <line id="선_13" data-name="선 13" x2="9.307" y2="6.515" transform="translate(2.863 9.64)" fill="none" stroke="#34303d" stroke-width="1.5"/>
+      <g id="패스_388" data-name="패스 388" transform="translate(8.813 12.938)" fill="#fff">
+        <path d="M 3 5.25 C 1.759349942207336 5.25 0.75 4.240650177001953 0.75 3 C 0.75 1.759349942207336 1.759349942207336 0.75 3 0.75 C 4.240650177001953 0.75 5.25 1.759349942207336 5.25 3 C 5.25 4.240650177001953 4.240650177001953 5.25 3 5.25 Z" stroke="none"/>
+        <path d="M 3 1.5 C 2.172899961471558 1.5 1.5 2.172899961471558 1.5 3 C 1.5 3.827100038528442 2.172899961471558 4.5 3 4.5 C 3.827100038528442 4.5 4.5 3.827100038528442 4.5 3 C 4.5 2.172899961471558 3.827100038528442 1.5 3 1.5 M 3 0 C 4.65684986114502 0 6 1.34315013885498 6 3 C 6 4.65684986114502 4.65684986114502 6 3 6 C 1.34315013885498 6 0 4.65684986114502 0 3 C 0 1.34315013885498 1.34315013885498 0 3 0 Z" stroke="none" fill="#34303d"/>
+      </g>
+      <line id="선_14" data-name="선 14" x1="9.307" y2="6.515" transform="translate(2.863 2.195)" fill="none" stroke="#34303d" stroke-width="1.5"/>
+      <g id="타원_8" data-name="타원 8" transform="translate(8.813 -0.062)" fill="#fff" stroke="#34303d" stroke-width="1.5">
+        <circle cx="3" cy="3" r="3" stroke="none"/>
+        <circle cx="3" cy="3" r="2.25" fill="none"/>
+      </g>
+      <g id="타원_10" data-name="타원 10" transform="translate(-0.187 5.938)" fill="#fff" stroke="#34303d" stroke-width="1.5">
+        <circle cx="3" cy="3" r="3" stroke="none"/>
+        <circle cx="3" cy="3" r="2.25" fill="none"/>
+      </g>
+    </g>
+  </g>
+</svg>

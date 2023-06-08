@@ -1,0 +1,10 @@
+<svg id="floating_btn" xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 54 54">
+  <circle id="타원_4" data-name="타원 4" cx="27" cy="27" r="27" fill="#34303d"/>
+  <g id="그룹_392" data-name="그룹 392" transform="translate(-1806 -821)">
+    <g id="그룹_392-2" data-name="그룹 392" transform="translate(-60.5 -5.5)">
+      <line id="선_23" data-name="선 23" x1="18" y2="18" transform="translate(1884.5 844.5)" fill="none" stroke="#00d1d2" stroke-linecap="round" stroke-width="3"/>
+      <line id="선_24" data-name="선 24" x1="18" y1="18" transform="translate(1884.5 844.5)" fill="none" stroke="#00d1d2" stroke-linecap="round" stroke-width="3"/>
+    </g>
+    <rect id="사각형_321" data-name="사각형 321" width="24" height="24" transform="translate(1821 836)" fill="none"/>
+  </g>
+</svg>

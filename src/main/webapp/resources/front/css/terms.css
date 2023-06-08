@@ -1,0 +1,190 @@
+@charset "utf-8";
+
+/*
+ * File       : terms.css
+ * Author     : m-sync (baeyoungseop)
+ *
+ * SUMMARY:
+ * 1) 정책
+ *
+ */
+
+
+
+
+
+ /*
+ ** 19-07-24 정책
+ */
+.iqos_terms {
+    padding-top: 70px;
+}
+.terms_list_wrap {
+    margin-top: 110px;
+}
+.terms_list {
+    margin-top: 74px;
+}
+.terms_list:first-child {
+    margin-top: 0;
+}
+.terms_title h4 {
+    font-size: 30px;
+    font-weight: bold;
+}
+.terms_des {
+    margin-top: 24px;
+}
+.terms_des p, .terms_des li {
+    font-size: 18px;
+    word-break: keep-all;
+    line-height: 1.7em;
+    position: relative;
+}
+.terms_des.listing > ul > li {
+    margin-top: 34px;
+    padding-left: 60px;
+}
+.terms_des.listing > ul > li:first-child {
+    margin-top: 0;
+}
+.terms_des.listing > ul > li:after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    content: attr(data-index);
+    font-weight: bold;
+    letter-spacing: 0;
+    font-family: 'Roboto', sans-serif;
+}
+.terms_des.listing .terms_depth2 li {
+    padding-left: 20px;
+    color: #9d8276;
+}
+.terms_des.listing .terms_depth2 li:after {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 50%;
+    margin-top: -4px;
+    width: 6px;
+    height: 6px;
+    background: #9d8276;
+    border-radius: 100%;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    -ms-border-radius: 100%;
+    -o-border-radius: 100%;
+}
+
+/* 커스텀 */
+#header {
+    background-color: #fffdfb;
+}
+.section_title h2 span, .section_title h2 {
+    font-size: 40px;
+    line-height: 50px;
+    /*font: normal normal bold 40px/50px IQOS Hangul;*/
+}
+.terms_title h4 {
+    font-size: 24px;
+    line-height: 20px;
+    color:#34303D;
+}
+.terms_des p, .terms_des li {
+    font-size: 16px;
+    line-height: 28px;
+}
+.terms_list_wrap {
+    margin-top: 60px;
+}
+.terms_list {
+    margin-top: 60px;
+}
+.terms_des.listing > ul > li {
+    padding-left: 42px;
+    color:#34303D;
+}
+.terms_des.listing > ul > li:after {
+    line-height: 27px;
+    color:#34303D;
+}
+.terms_des.listing .terms_depth2 li {
+    color:#524F5A;
+    line-height: 32px;
+}
+.terms_depth2 {
+    margin-top: 5px;
+}
+.terms_des.listing .terms_depth2 li:after {
+    background-color: #524F5A;
+}
+@media screen and (max-width: 768px) {
+    .iqos_terms {
+        padding-top: 35px;
+    }
+    .terms_title h4 {
+        font-size: 20px;
+    }
+    .terms_des p, .terms_des li {
+        font-size: 14px;
+    }
+    .terms_des.listing > ul > li {
+        padding-left: 30px;
+    }
+    .terms_des.listing .terms_depth2 li:after {
+        width: 4px;
+        height: 4px;
+    }
+    .terms_des.listing .terms_depth2 li {
+        padding-left: 14px;
+    }
+
+    .terms_list_wrap {
+        margin-top: 60px;
+    }
+    .terms_des {
+        margin-top: 15px;
+    }
+    .terms_list {
+        margin-top: 37px;
+    }
+    .terms_des.listing > ul > li {
+        margin-top: 20px;
+    }
+    /*커스텀*/
+    .section_title h2 span, .section_title h2 {
+        font-size: 24px;
+        line-height: 30px;
+    }
+    .terms_title h4 {
+        font-size: 18px;
+        line-height: 28px;
+    }
+    .terms_list {
+        margin-top: 48px;
+    }
+    .terms_list_wrap {
+        margin-top: 64px;
+    }
+    .terms_des p, .terms_des li {
+        font-size: 13px;
+        line-height: 20px;
+    }
+    .terms_des.listing > ul > li {
+        padding-left: 26px;
+    }
+    .terms_des.listing > ul > li:after {
+        line-height: 20px;
+    }
+    .terms_des.listing .terms_depth2 li {
+        font-size: 14px;
+        line-height: 20px;
+        margin-top: 10px;
+    }
+    .terms_des.listing .terms_depth2 li:after {
+        width: 6px;
+        height: 6px;
+        top: 9px;
+    }
+}

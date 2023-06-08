@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="그룹_300" data-name="그룹 300" transform="translate(-38 -452)">
+    <rect id="Content" width="20" height="20" transform="translate(38 452)" fill="none"/>
+    <g id="location" transform="translate(41.942 453.719)">
+      <g id="그룹_288" data-name="그룹 288" transform="translate(0 0)">
+        <g id="그룹_287" data-name="그룹 287">
+          <g id="그룹_286" data-name="그룹 286">
+            <g id="그룹_285" data-name="그룹 285">
+              <g id="그룹_284" data-name="그룹 284">
+                <path id="패스_10" data-name="패스 10" d="M6.809.75A6.013,6.013,0,0,1,11.09,2.539a6.126,6.126,0,0,1,1.776,4.327c0,2.152-1.784,5.481-5.194,10.016a1.225,1.225,0,0,1-1.016.421,1.086,1.086,0,0,1-.713-.421C2.534,12.347.75,9.018.75,6.866A6.127,6.127,0,0,1,2.527,2.539,6.01,6.01,0,0,1,6.809.75Z" transform="translate(-0.75 -0.75)" fill="none" stroke="#34303d" stroke-width="1.5" fill-rule="evenodd"/>
+                <circle id="타원_7" data-name="타원 7" cx="1.806" cy="1.806" r="1.806" transform="translate(4.218 3.992)" fill="none" stroke="#34303d" stroke-width="1.5"/>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.service.dao.ServiceMapper">
+
+	<sql id="serviceListSelect">
+		<if test="no_service!=null and !no_service.equals('')">
+			AND x.no_service = #{no_service, jdbcType=VARCHAR}
+		</if>
+		<if test="service_div!=null and !service_div.equals('')">
+			AND x.service_div = #{service_div, jdbcType=VARCHAR}
+		</if>
+		<if test="service_name!=null and !service_name.equals('')">
+			AND x.service_name LIKE REPLACE(CONCAT('%',#{service_name},'%'),' ','')
+		</if>
+		<if test="use_yn!=null and !use_yn.equals('')">
+			AND x.use_yn = #{use_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="del_yn!=null and !del_yn.equals('')">
+			AND x.del_yn = #{del_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_id!=null and !reg_id.equals('')">
+			AND x.reg_id = #{reg_id, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_name!=null and !reg_name.equals('')">
+			AND x.reg_name LIKE REPLACE(CONCAT('%',#{reg_name},'%'),' ','')
+		</if>
+		<if test="reg_date_start!=null and !reg_date_start.equals('')">
+			AND substring(x.reg_date,1,8) >= replace(#{reg_date_start},'-','')
+		</if>
+		<if test="reg_date_end!=null and !reg_date_end.equals('')">
+			AND substring(x.reg_date,1,8) &lt;= replace(#{reg_date_end},'-','')
+		</if>
+		<if test="mod_id!=null and !mod_id.equals('')">
+			AND x.mod_id = #{mod_id, jdbcType=VARCHAR}
+		</if>
+		<if test="mod_name!=null and !mod_name.equals('')">
+			AND x.mod_name LIKE REPLACE(CONCAT('%',#{mod_name},'%'),' ','')
+		</if>
+		<if test="mod_date_start!=null and !mod_date_start.equals('')">
+			AND substring(x.mod_date,1,8) >= replace(#{mod_date_start},'-','')
+		</if>
+		<if test="mod_date_end!=null and !mod_date_end.equals('')">
+			AND substring(x.mod_date,1,8) &lt;= replace(#{mod_date_end},'-','')
+		</if>
+	</sql>
+
+	<sql id="serviceFileUpdate">
+		<if test="file_path!=null and !file_path.equals('')">
+			, file_path = #{file_path, jdbcType=VARCHAR}
+		</if>
+		<if test="origin_name!=null and !origin_name.equals('')">
+			, origin_name = #{origin_name, jdbcType=VARCHAR}
+		</if>
+		<if test="save_name!=null and !save_name.equals('')">
+			, save_name = #{save_name, jdbcType=VARCHAR}
+		</if>
+		<if test="file_size!=null and !file_size.equals('')">
+			, file_size = #{file_size, jdbcType=VARCHAR}
+		</if>
+		<if test="width!=null and !width.equals('')">
+			, width = #{width, jdbcType=VARCHAR}
+		</if>
+		<if test="height!=null and !height.equals('')">
+			, height = #{height, jdbcType=VARCHAR}
+		</if>
+		<if test="file_ext!=null and !file_ext.equals('')">
+			, file_ext = #{file_ext, jdbcType=VARCHAR}
+		</if>
+	</sql>
+
+	<select id="getServiceExcelList" parameterType="kr.co.msync.web.module.service.model.req.ServiceReqVO" resultType="kr.co.msync.web.module.service.model.res.ServiceResVO">
+		select
+		y.no_service
+		, getCodeName("service_div", y.service_div) as service_div
+		, y.service_name
+		, y.file_path
+		, y.origin_name
+		, y.save_name
+		, y.file_size
+		, y.width
+		, y.height
+		, y.file_ext
+		, getCodeName("use_yn", y.use_yn) as use_yn
+		, getCodeName("del_yn", y.del_yn) as del_yn
+		, y.reg_id
+		, y.reg_name
+		, y.reg_date
+		, y.mod_id
+		, y.mod_name
+		, y.mod_date
+		from (select
+		x.no_service
+		, x.service_div
+		, x.service_name
+		, x.file_path
+		, x.origin_name
+		, x.save_name
+		, x.file_size
+		, x.width
+		, x.height
+		, x.file_ext
+		, x.use_yn
+		, x.del_yn
+		, x.reg_id
+		, x.reg_name
+		, x.reg_date
+		, x.mod_id
+		, x.mod_name
+		, x.mod_date
+		from tb_service x
+		where 1=1
+		<include refid="serviceListSelect" />
+		) y
+		ORDER BY ${order_column} ${order_type}
+	</select>
+
+	<select id="getServiceList" parameterType="kr.co.msync.web.module.service.model.req.ServiceReqVO" resultType="kr.co.msync.web.module.service.model.res.ServiceResVO">
+		select
+		x.no_service
+		, x.service_div
+		, x.service_name
+		, x.use_yn
+		, x.del_yn
+		, x.reg_id
+		, x.reg_name
+		, x.reg_date
+		, x.mod_id
+		, x.mod_name
+		, x.mod_date
+		from (select
+		no_service
+		, service_div
+		, service_name
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_service) x
+		where 1=1
+		<include refid="serviceListSelect" />
+		ORDER BY ${order_column} ${order_type}
+		limit #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="getServiceListCnt" parameterType="kr.co.msync.web.module.service.model.req.ServiceReqVO" resultType="int">
+		select
+		count(*) cnt
+		from (select
+		no_service
+		, service_div
+		, service_name
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_service) x
+		where 1=1
+		<include refid="serviceListSelect" />
+	</select>
+
+	<select id="getServiceInfo" parameterType="kr.co.msync.web.module.service.model.req.ServiceReqVO" resultType="kr.co.msync.web.module.service.model.res.ServiceResVO">
+		select
+		  no_service
+		, service_div
+		, service_name
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, use_yn
+		, comment
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_service
+		WHERE no_service = #{no_service}
+	</select>
+
+	<update id="serviceDelAction" parameterType="kr.co.msync.web.module.service.model.req.ServiceReqVO">
+		UPDATE tb_service SET DEL_YN = 'Y', MOD_ID = #{mod_id}, MOD_NAME = #{mod_name}, MOD_DATE = #{mod_date}
+		WHERE no_service in <foreach collection="del_no_service" item="no_service" index="index" separator="," open="(" close=")">
+		#{no_service}
+	</foreach>
+	</update>
+
+	<update id="storeServiceMapDelAction" parameterType="kr.co.msync.web.module.service.model.req.ServiceReqVO">
+		delete from tb_store_service_map
+		WHERE no_service in <foreach collection="del_no_service" item="no_service" index="index" separator="," open="(" close=")">
+		#{no_service}
+	</foreach>
+	</update>
+
+	<update id="serviceRegAction" parameterType="kr.co.msync.web.module.service.model.req.ServiceReqVO">
+		insert into tb_service (
+			  no_service
+			, service_div
+			, service_name
+			, file_path
+			, origin_name
+			, save_name
+			, file_size
+			, width
+			, height
+			, file_ext
+			, use_yn
+			, comment
+			, del_yn
+			, reg_id
+			, reg_name
+			, reg_date
+		) values (
+			  #{no_service, jdbcType=VARCHAR}
+			, #{service_div, jdbcType=VARCHAR}
+			, #{service_name, jdbcType=VARCHAR}
+			, #{file_path, jdbcType=VARCHAR}
+			, #{origin_name, jdbcType=VARCHAR}
+			, #{save_name, jdbcType=VARCHAR}
+			, #{file_size, jdbcType=VARCHAR}
+			, #{width, jdbcType=VARCHAR}
+			, #{height, jdbcType=VARCHAR}
+			, #{file_ext, jdbcType=VARCHAR}
+			, #{use_yn, jdbcType=VARCHAR}
+			, #{comment, jdbcType=VARCHAR}
+			, #{del_yn, jdbcType=VARCHAR}
+			, #{reg_id, jdbcType=VARCHAR}
+			, #{reg_name, jdbcType=VARCHAR}
+			, #{reg_date, jdbcType=VARCHAR}
+		)
+	</update>
+
+	<update id="serviceModAction" parameterType="kr.co.msync.web.module.service.model.req.ServiceReqVO">
+		update tb_service set
+			  service_div = #{service_div, jdbcType=VARCHAR}
+			, service_name = #{service_name, jdbcType=VARCHAR}
+			, use_yn = #{use_yn, jdbcType=VARCHAR}
+			, comment = #{comment, jdbcType=VARCHAR}
+			, mod_id = #{mod_id, jdbcType=VARCHAR}
+			, mod_name = #{mod_name, jdbcType=VARCHAR}
+			, mod_date = #{mod_date, jdbcType=VARCHAR}
+			<include refid="serviceFileUpdate" />
+		where no_service = #{no_service, jdbcType=VARCHAR}
+	</update>
+
+</mapper>

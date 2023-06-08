@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.user.dao.UserMapper">
+
+	<sql id="userListSelect">
+		<if test="no_user!=null and !no_user.equals('')">
+			AND x.no_user = #{no_user, jdbcType=VARCHAR}
+		</if>
+		<if test="login_id!=null and !login_id.equals('')">
+			AND x.login_id LIKE REPLACE(CONCAT('%',#{login_id},'%'),' ','')
+		</if>
+		<if test="user_name!=null and !user_name.equals('')">
+			AND x.user_name LIKE REPLACE(CONCAT('%',#{user_name},'%'),' ','')
+		</if>
+		<if test="user_en_name!=null and !user_en_name.equals('')">
+			AND x.user_en_name LIKE REPLACE(CONCAT('%',#{user_en_name},'%'),' ','')
+		</if>
+		<if test="email_addr!=null and !email_addr.equals('')">
+			AND x.email_addr LIKE REPLACE(CONCAT('%',#{email_addr},'%'),' ','')
+		</if>
+		<if test="user_company!=null and !user_company.equals('')">
+			AND x.user_company = #{user_company, jdbcType=VARCHAR}
+		</if>
+		<if test="user_channel!=null and !user_channel.equals('')">
+			AND x.user_channel = #{user_channel, jdbcType=VARCHAR}
+		</if>
+		<if test="user_grt!=null and !user_grt.equals('')">
+			AND x.user_grt = #{user_grt, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_way!=null and !reg_way.equals('')">
+			AND x.reg_way = #{reg_way, jdbcType=VARCHAR}
+		</if>
+		<if test="del_yn!=null and !del_yn.equals('')">
+			AND x.del_yn = #{del_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="user_status!=null and !user_status.equals('')">
+			AND x.user_status = #{user_status, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_date_start!=null and !reg_date_start.equals('')">
+			AND substring(x.reg_date,1,8) >= replace(#{reg_date_start},'-','')
+		</if>
+		<if test="reg_date_end!=null and !reg_date_end.equals('')">
+			AND substring(x.reg_date,1,8) &lt;= replace(#{reg_date_end},'-','')
+		</if>
+		<if test="mod_date_start!=null and !mod_date_start.equals('')">
+			AND substring(x.mod_date,1,8) >= replace(#{mod_date_start},'-','')
+		</if>
+		<if test="mod_date_end!=null and !mod_date_end.equals('')">
+			AND substring(x.mod_date,1,8) &lt;= replace(#{mod_date_end},'-','')
+		</if>
+	</sql>
+
+	<select id="getUserCount" parameterType="String" resultType="Integer">
+		select count(*) from tb_user where login_id = #{value}
+	</select>
+
+	<select id="userPasswordConfirm" parameterType="String" resultType="Integer">
+		select count(*) from tb_user where no_user = #{value} and substring(last_pwd_mod_date,1,8) &lt;= replace(substring(SUBDATE(NOW(), INTERVAL 90 DAY),1,10),'-','')
+	</select>
+
+	<select id="userPasswordModConfirm" parameterType="String" resultType="Integer">
+		select count(*) from tb_user where no_user = #{value} and substring(last_pwd_mod_date,1,14) &gt; DATE_FORMAT(SUBDATE(NOW(), INTERVAL 1 DAY),'%Y%m%d%H%i%s')
+	</select>
+
+	<select id="getUserExcelList" parameterType="kr.co.msync.web.module.user.model.req.UserReqVO" resultType="kr.co.msync.web.module.user.model.res.UserResVO">
+		select
+		y.no_user
+		, y.login_id
+		, y.user_name
+		, y.user_en_name
+		, y.email_addr
+		, getCodeName("user_company", y.user_company) AS user_company
+		, getCodeName("store_type", y.user_channel) AS user_channel
+		, y.password
+		, getCodeName("user_grt", y.user_grt) as user_grt
+		, getCodeName("reg_way", y.reg_way) as reg_way
+		, getCodeName("user_status", y.user_status) as user_status
+		, getCodeName("del_yn", y.del_yn) as del_yn
+		, y.reg_date
+		, y.mod_date
+		from (select
+		x.no_user
+		, x.login_id
+		, x.user_name
+		, x.user_en_name
+		, x.email_addr
+		, x.user_company
+		, x.user_channel
+		, x.password
+		, x.user_grt
+		, x.reg_way
+		, x.user_status
+		, x.del_yn
+		, x.reg_date
+		, x.mod_date
+		from tb_user x
+		where 1=1
+		<include refid="userListSelect" />
+		) y
+		ORDER BY ${order_column} ${order_type}
+	</select>
+
+	<update id="userRegAction" parameterType="kr.co.msync.web.module.user.model.req.UserInfoReqVO">
+		INSERT INTO tb_user (
+			  NO_USER
+			, LOGIN_ID
+			, USER_NAME
+			, USER_EN_NAME
+			, EMAIL_ADDR
+			, USER_COMPANY
+			, USER_CHANNEL
+			, PASSWORD
+			, USER_GRT
+			, USER_STATUS
+			, REG_WAY
+			, DEL_YN
+			, REG_DATE
+			, LAST_PWD_MOD_DATE
+		) VALUES (
+		      #{no_user, jdbcType=VARCHAR}
+			, #{login_id, jdbcType=VARCHAR}
+			, #{user_name, jdbcType=VARCHAR}
+			, #{user_en_name, jdbcType=VARCHAR}
+			, #{email_addr, jdbcType=VARCHAR}
+			, #{user_company, jdbcType=VARCHAR}
+			, #{user_channel, jdbcType=VARCHAR}
+			, #{password, jdbcType=VARCHAR}
+			, #{user_grt, jdbcType=VARCHAR}
+			, #{user_status, jdbcType=VARCHAR}
+			, #{reg_way, jdbcType=VARCHAR}
+			, #{del_yn, jdbcType=VARCHAR}
+			, #{reg_date, jdbcType=VARCHAR}
+			, #{last_pwd_mod_date, jdbcType=VARCHAR}
+		)
+	</update>
+
+	<update id="userRegPwdHist" parameterType="kr.co.msync.web.module.user.model.req.UserReqVO">
+		INSERT INTO tb_user_pwd_hist (
+			  NO_USER
+			, LOGIN_ID
+			, PASSWORD
+			, REG_DATE
+		) VALUES (
+		      #{no_user, jdbcType=VARCHAR}
+			, #{login_id, jdbcType=VARCHAR}
+			, #{password, jdbcType=VARCHAR}
+			, #{reg_date, jdbcType=VARCHAR}
+		)
+	</update>
+
+	<update id="userGrtRegAction" parameterType="kr.co.msync.web.module.user.model.req.UserInfoReqVO">
+		INSERT INTO tb_menu_grt (
+			  NO_USER
+			, NO_MENU
+			, WRITE_GRT
+		) VALUES (
+		      #{no_user, jdbcType=VARCHAR}
+			, #{no_menu, jdbcType=VARCHAR}
+			, #{write_grt, jdbcType=VARCHAR}
+		)
+	</update>
+
+	<update id="userModAction" parameterType="kr.co.msync.web.module.user.model.req.UserInfoReqVO">
+		UPDATE
+		tb_user
+		SET
+		<if test="password!=null and !password.equals('')">
+			PASSWORD = #{password},
+		</if>
+		<if test="last_pwd_mod_date!=null and !last_pwd_mod_date.equals('')">
+			LAST_PWD_MOD_DATE = #{last_pwd_mod_date},
+		</if>
+		<if test="user_channel!=null and !user_channel.equals('')">
+			USER_CHANNEL = #{user_channel},
+		</if>
+		<if test="user_status!=null and !user_status.equals('')">
+			USER_STATUS = #{user_status},
+		</if>
+		MOD_DATE = #{mod_date}
+		WHERE	NO_USER = #{no_user}
+	</update>
+
+	<select id="getUserInfo" parameterType="kr.co.msync.web.module.user.model.req.UserInfoReqVO" resultType="kr.co.msync.web.module.user.model.res.UserInfoResVO">
+		SELECT
+		  no_user
+		, login_id
+		, user_name
+		, user_en_name
+		, email_addr
+		, user_company
+		, user_channel
+		, password
+		, user_grt
+		, reg_way
+		, del_yn
+		, user_status
+		, reg_date
+		, mod_date
+		FROM tb_user
+		WHERE 1=1
+		<if test="no_user!=null and !no_user.equals('')">
+			AND no_user = #{no_user}
+		</if>
+		<if test="login_id!=null and !login_id.equals('')">
+			AND login_id = #{login_id}
+		</if>
+		<if test="del_yn!=null and !del_yn.equals('')">
+			AND del_yn = #{del_yn, jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<select id="getUserList" parameterType="kr.co.msync.web.module.user.model.req.UserReqVO" resultType="kr.co.msync.web.module.user.model.res.UserResVO">
+		select
+		  x.no_user
+		, x.login_id
+		, x.user_name
+		, x.user_en_name
+		, x.email_addr
+		, x.user_company
+		, x.user_channel
+		, x.password
+		, x.user_grt
+		, x.reg_way
+		, x.del_yn
+		, x.user_status
+		, x.reg_date
+		, x.mod_date
+		from (select
+		  no_user
+		, login_id
+		, user_name
+		, user_en_name
+		, email_addr
+		, user_company
+		, user_channel
+		, password
+		, user_grt
+		, reg_way
+		, del_yn
+		, user_status
+		, reg_date
+		, mod_date
+		from tb_user) x
+		where 1=1
+		<include refid="userListSelect" />
+		ORDER BY ${order_column} ${order_type}
+		limit #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="getUserListCnt" parameterType="kr.co.msync.web.module.user.model.req.UserReqVO" resultType="int">
+		select
+		count(*) cnt
+		from (select
+		  no_user
+		, login_id
+		, user_name
+		, user_en_name
+		, email_addr
+		, user_company
+		, user_channel
+		, password
+		, user_grt
+		, reg_way
+		, del_yn
+		, user_status
+		, reg_date
+		, mod_date
+		from tb_user) x
+		where 1=1
+		<include refid="userListSelect" />
+	</select>
+
+	<select id="getUserPasswordCount" parameterType="kr.co.msync.web.module.user.model.req.UserReqVO" resultType="int">
+		SELECT count(*) as cnt
+		  FROM (SELECT c.row_num,
+					   c.no_user,
+					   c.login_id,
+					   c.password,
+					   c.reg_date
+				  FROM (SELECT @rownum := @rownum + 1 AS row_num,
+							   no_user,
+							   login_id,
+							   password,
+							   reg_date
+						  FROM tb_user_pwd_hist INNER JOIN (SELECT @rownum := 0) t2
+						 WHERE login_id = #{login_id}
+						ORDER BY reg_date DESC) c
+				 WHERE c.row_num BETWEEN 1 AND 10) a
+		 WHERE a.password = #{password}
+	</select>
+
+	<update id="userDelAction" parameterType="kr.co.msync.web.module.user.model.req.UserReqVO">
+		UPDATE tb_user SET DEL_YN = 'Y', MOD_DATE = #{mod_date}
+		WHERE no_user = #{no_user}
+	</update>
+
+	<update id="userApprovedAction" parameterType="kr.co.msync.web.module.user.model.req.UserReqVO">
+		UPDATE tb_user SET USER_STATUS = '02'
+		WHERE no_user = #{no_user}
+	</update>
+
+	<update id="userDeniedAction" parameterType="kr.co.msync.web.module.user.model.req.UserReqVO">
+		UPDATE tb_user SET USER_STATUS = '03'
+		WHERE no_user = #{no_user}
+	</update>
+
+</mapper>

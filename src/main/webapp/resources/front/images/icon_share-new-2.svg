@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="그룹_302" data-name="그룹 302" transform="translate(-59 -480)">
+    <rect id="Content" width="20" height="20" transform="translate(59 480)" fill="#f6f4f0"/>
+    <g id="그룹_301" data-name="그룹 301" transform="translate(61.187 481.062)">
+      <line id="선_13" data-name="선 13" x2="9.307" y2="6.515" transform="translate(2.863 9.64)" fill="none" stroke="#34303d" stroke-width="1.5"/>
+      <g id="타원_9" data-name="타원 9" transform="translate(8.813 12.938)" fill="#f6f4f0" stroke="#34303d" stroke-width="1.5">
+        <circle cx="3" cy="3" r="3" stroke="none"/>
+        <circle cx="3" cy="3" r="2.25" fill="none"/>
+      </g>
+      <line id="선_14" data-name="선 14" x1="9.307" y2="6.515" transform="translate(2.863 2.195)" fill="none" stroke="#34303d" stroke-width="1.5"/>
+      <g id="타원_8" data-name="타원 8" transform="translate(8.813 -0.062)" fill="#f6f4f0" stroke="#34303d" stroke-width="1.5">
+        <circle cx="3" cy="3" r="3" stroke="none"/>
+        <circle cx="3" cy="3" r="2.25" fill="none"/>
+      </g>
+      <g id="타원_10" data-name="타원 10" transform="translate(-0.187 5.938)" fill="#f6f4f0" stroke="#34303d" stroke-width="1.5">
+        <circle cx="3" cy="3" r="3" stroke="none"/>
+        <circle cx="3" cy="3" r="2.25" fill="none"/>
+      </g>
+    </g>
+  </g>
+</svg>

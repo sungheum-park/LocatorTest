@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.color.dao.ColorMapper">
+
+	<sql id="colorListSelect">
+		<if test="no_color!=null and !no_color.equals('')">
+			AND no_color = #{no_color, jdbcType=VARCHAR}
+		</if>
+		<if test="color_name!=null and !color_name.equals('')">
+			AND color_name LIKE REPLACE(CONCAT('%',#{color_name},'%'),' ','')
+		</if>
+		<if test="color_rgb!=null and !color_rgb.equals('')">
+			AND color_rgb LIKE REPLACE(CONCAT('%',#{color_rgb},'%'),' ','')
+		</if>
+		<if test="use_yn!=null and !use_yn.equals('')">
+			AND use_yn = #{use_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="del_yn!=null and !del_yn.equals('')">
+			AND del_yn = #{del_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_id!=null and !reg_id.equals('')">
+			AND reg_id = #{reg_id, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_name!=null and !reg_name.equals('')">
+			AND reg_name LIKE REPLACE(CONCAT('%',#{reg_name},'%'),' ','')
+		</if>
+		<if test="reg_date_start!=null and !reg_date_start.equals('')">
+			AND substring(reg_date,1,8) >= replace(#{reg_date_start},'-','')
+		</if>
+		<if test="reg_date_end!=null and !reg_date_end.equals('')">
+			AND substring(reg_date,1,8) &lt;= replace(#{reg_date_end},'-','')
+		</if>
+		<if test="mod_id!=null and !mod_id.equals('')">
+			AND mod_id = #{mod_id, jdbcType=VARCHAR}
+		</if>
+		<if test="mod_name!=null and !mod_name.equals('')">
+			AND mod_name LIKE REPLACE(CONCAT('%',#{mod_name},'%'),' ','')
+		</if>
+		<if test="mod_date_start!=null and !mod_date_start.equals('')">
+			AND substring(mod_date,1,8) >= replace(#{mod_date_start},'-','')
+		</if>
+		<if test="mod_date_end!=null and !mod_date_end.equals('')">
+			AND substring(mod_date,1,8) &lt;= replace(#{mod_date_end},'-','')
+		</if>
+	</sql>
+
+	<select id="getColorExcelList" parameterType="kr.co.msync.web.module.color.model.req.ColorReqVO" resultType="kr.co.msync.web.module.color.model.res.ColorResVO">
+		select
+		  x.no_color
+		, x.color_name
+		, x.color_rgb
+		, x.color_sno
+		, getCodeName("use_yn", x.use_yn) as use_yn
+		, getCodeName("del_yn", x.del_yn) as del_yn
+		, x.reg_id
+		, x.reg_name
+		, x.reg_date
+		, x.mod_id
+		, x.mod_name
+		, x.mod_date
+		from (select
+		  no_color
+		, color_name
+		, color_rgb
+		, color_sno
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_device_color
+		where 1=1
+		<include refid="colorListSelect" />
+		) x
+		ORDER BY ${order_column} ${order_type}
+	</select>
+
+	<select id="getColorList" parameterType="kr.co.msync.web.module.color.model.req.ColorReqVO" resultType="kr.co.msync.web.module.color.model.res.ColorResVO">
+		select
+		x.no_color
+		, x.color_name
+		, x.color_rgb
+		, x.color_sno
+		, x.use_yn
+		, x.del_yn
+		, x.reg_id
+		, x.reg_name
+		, x.reg_date
+		, x.mod_id
+		, x.mod_name
+		, x.mod_date
+		from (select
+		no_color
+		, color_name
+		, color_rgb
+		, color_sno
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_device_color
+		where 1=1
+		<include refid="colorListSelect" />
+		) x
+		ORDER BY ${order_column} ${order_type}
+		limit #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="getColorSnoExcgList" resultType="kr.co.msync.web.module.color.model.res.ColorResVO">
+		select
+		no_color
+		, color_name
+		, color_rgb
+		, color_sno
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_device_color
+		where 1=1
+		and use_yn = 'Y'
+		and del_yn = 'N'
+		ORDER BY color_sno asc
+	</select>
+
+	<select id="getColorListCnt" parameterType="kr.co.msync.web.module.color.model.req.ColorReqVO" resultType="int">
+		select
+		count(*) cnt
+		from (select
+		no_color
+		, color_name
+		, color_rgb
+		, color_sno
+		, use_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_device_color
+		where 1=1
+		<include refid="colorListSelect" />
+		) x
+
+	</select>
+
+	<select id="getColorInfo" parameterType="kr.co.msync.web.module.color.model.req.ColorReqVO" resultType="kr.co.msync.web.module.color.model.res.ColorResVO">
+		select
+			  no_color
+			, color_name
+			, color_rgb
+			, color_sno
+			, use_yn
+			, del_yn
+			, reg_id
+			, reg_name
+			, reg_date
+			, mod_id
+			, mod_name
+			, mod_date
+		from tb_device_color
+		WHERE no_color = #{no_color}
+	</select>
+
+	<update id="colorRegAction" parameterType="kr.co.msync.web.module.color.model.req.ColorReqVO">
+		insert into tb_device_color(
+				no_color
+			  , color_name
+			  , color_rgb
+			  , color_sno
+			  , use_yn
+			  , del_yn
+			  , reg_id
+			  , reg_name
+			  , reg_date
+		  ) values (
+		        #{no_color, jdbcType=VARCHAR}
+		      , #{color_name, jdbcType=VARCHAR}
+		      , #{color_rgb, jdbcType=VARCHAR}
+		      , (select ifnull(max(b.color_sno),0)+1 from tb_device_color b)
+		      , #{use_yn, jdbcType=VARCHAR}
+		      , #{del_yn, jdbcType=VARCHAR}
+		      , #{reg_id, jdbcType=VARCHAR}
+		      , #{reg_name, jdbcType=VARCHAR}
+		      , #{reg_date, jdbcType=VARCHAR}
+		  )
+	</update>
+
+	<update id="colorModAction" parameterType="kr.co.msync.web.module.color.model.req.ColorReqVO">
+		update tb_device_color
+		set color_name = #{color_name, jdbcType=VARCHAR}
+		  , color_rgb = #{color_rgb, jdbcType=VARCHAR}
+		  , use_yn = #{use_yn, jdbcType=VARCHAR}
+		  , mod_id = #{mod_id, jdbcType=VARCHAR}
+		  , mod_name = #{mod_name, jdbcType=VARCHAR}
+		  , mod_date = #{mod_date, jdbcType=VARCHAR}
+		where no_color = #{no_color, jdbcType=VARCHAR}
+	</update>
+
+	<update id="excgDeviceMapDelAction" parameterType="kr.co.msync.web.module.color.model.req.ColorReqVO">
+		delete from tb_excg_device_map where  no_color in
+		<foreach collection="del_no_color" item="no_color" index="index" separator="," open="(" close=")">
+			#{no_color}
+		</foreach>
+	</update>
+
+	<update id="excgDeviceColorMapDelAction" parameterType="kr.co.msync.web.module.color.model.req.ColorReqVO">
+		delete from tb_device_color_map where  no_color in
+		<foreach collection="del_no_color" item="no_color" index="index" separator="," open="(" close=")">
+			#{no_color}
+		</foreach>
+	</update>
+
+	<update id="colorDelAction" parameterType="kr.co.msync.web.module.color.model.req.ColorReqVO">
+		UPDATE tb_device_color SET DEL_YN = 'Y', MOD_ID = #{mod_id}, MOD_NAME = #{mod_name}, MOD_DATE = #{mod_date}
+		WHERE no_color in
+		<foreach collection="del_no_color" item="no_color" index="index" separator="," open="(" close=")">
+			#{no_color}
+		</foreach>
+	</update>
+
+	<update id="colorSnoExcgAction" parameterType="kr.co.msync.web.module.color.model.req.ColorReqVO">
+		UPDATE tb_device_color SET color_sno = #{color_sno, jdbcType=VARCHAR}, MOD_ID = #{mod_id}, MOD_NAME = #{mod_name}, MOD_DATE = #{mod_date}
+		WHERE no_color = #{no_color, jdbcType=VARCHAR}
+	</update>
+
+	<select id="deviceColorMapCnt" parameterType="kr.co.msync.web.module.color.model.req.ColorReqVO" resultType="int">
+		select
+		count(*) cnt
+		from tb_device_color_map
+		where no_color in <foreach collection="del_no_color" item="no_color" index="index" separator="," open="(" close=")">
+			#{no_color}
+		</foreach>
+	</select>
+
+</mapper>

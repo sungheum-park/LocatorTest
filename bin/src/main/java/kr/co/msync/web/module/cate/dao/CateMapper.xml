@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.cate.dao.CateMapper">
+
+	<sql id="cateListSelect">
+		<if test="no_cate!=null and !no_cate.equals('')">
+			AND x.no_cate = #{no_cate, jdbcType=VARCHAR}
+		</if>
+		<if test="cate_name!=null and !cate_name.equals('')">
+			AND x.cate_name LIKE REPLACE(CONCAT('%',#{cate_name},'%'),' ','')
+		</if>
+		<if test="sell_yn!=null and !sell_yn.equals('')">
+			AND x.sell_yn = #{sell_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="excg_yn!=null and !excg_yn.equals('')">
+			AND x.excg_yn = #{excg_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="del_yn!=null and !del_yn.equals('')">
+			AND x.del_yn = #{del_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_id!=null and !reg_id.equals('')">
+			AND x.reg_id = #{reg_id, jdbcType=VARCHAR}
+		</if>
+		<if test="reg_name!=null and !reg_name.equals('')">
+			AND x.reg_name LIKE REPLACE(CONCAT('%',#{reg_name},'%'),' ','')
+		</if>
+		<if test="reg_date_start!=null and !reg_date_start.equals('')">
+			AND substring(x.reg_date,1,8) >= replace(#{reg_date_start},'-','')
+		</if>
+		<if test="reg_date_end!=null and !reg_date_end.equals('')">
+			AND substring(x.reg_date,1,8) &lt;= replace(#{reg_date_end},'-','')
+		</if>
+		<if test="mod_id!=null and !mod_id.equals('')">
+			AND x.mod_id = #{mod_id, jdbcType=VARCHAR}
+		</if>
+		<if test="mod_name!=null and !mod_name.equals('')">
+			AND x.mod_name LIKE REPLACE(CONCAT('%',#{mod_name},'%'),' ','')
+		</if>
+		<if test="mod_date_start!=null and !mod_date_start.equals('')">
+			AND substring(x.mod_date,1,8) >= replace(#{mod_date_start},'-','')
+		</if>
+		<if test="mod_date_end!=null and !mod_date_end.equals('')">
+			AND substring(x.mod_date,1,8) &lt;= replace(#{mod_date_end},'-','')
+		</if>
+	</sql>
+
+	<sql id="cateFileUpdate">
+		<if test="file_path!=null and !file_path.equals('')">
+			, file_path = #{file_path, jdbcType=VARCHAR}
+		</if>
+		<if test="origin_name!=null and !origin_name.equals('')">
+			, origin_name = #{origin_name, jdbcType=VARCHAR}
+		</if>
+		<if test="save_name!=null and !save_name.equals('')">
+			, save_name = #{save_name, jdbcType=VARCHAR}
+		</if>
+		<if test="file_size!=null and !file_size.equals('')">
+			, file_size = #{file_size, jdbcType=VARCHAR}
+		</if>
+		<if test="width!=null and !width.equals('')">
+			, width = #{width, jdbcType=VARCHAR}
+		</if>
+		<if test="height!=null and !height.equals('')">
+			, height = #{height, jdbcType=VARCHAR}
+		</if>
+		<if test="file_ext!=null and !file_ext.equals('')">
+			, file_ext = #{file_ext, jdbcType=VARCHAR}
+		</if>
+	</sql>
+
+	<select id="getCateExcelList" parameterType="kr.co.msync.web.module.cate.model.req.CateReqVO" resultType="kr.co.msync.web.module.cate.model.res.CateResVO">
+		select
+		y.no_cate
+		, y.cate_name
+		, y.file_path
+		, y.origin_name
+		, y.save_name
+		, y.file_size
+		, y.width
+		, y.height
+		, y.file_ext
+		, getCodeName("sell_yn", y.sell_yn) as sell_yn
+		, getCodeName("excg_yn", y.excg_yn) as excg_yn
+		, getCodeName("del_yn", y.del_yn) as del_yn
+		, y.reg_id
+		, y.reg_name
+		, y.reg_date
+		, y.mod_id
+		, y.mod_name
+		, y.mod_date
+		from (select
+		x.no_cate
+		, x.cate_name
+		, x.file_path
+		, x.origin_name
+		, x.save_name
+		, x.file_size
+		, x.width
+		, x.height
+		, x.file_ext
+		, x.sell_yn
+		, x.excg_yn
+		, x.del_yn
+		, x.reg_id
+		, x.reg_name
+		, x.reg_date
+		, x.mod_id
+		, x.mod_name
+		, x.mod_date
+		from tb_category x
+		where 1=1
+		<include refid="cateListSelect" />
+		) y
+		ORDER BY ${order_column} ${order_type}
+	</select>
+
+	<select id="getCateList" parameterType="kr.co.msync.web.module.cate.model.req.CateReqVO" resultType="kr.co.msync.web.module.cate.model.res.CateResVO">
+		select
+		x.no_cate
+		, x.cate_name
+		, x.file_path
+		, x.origin_name
+		, x.save_name
+		, x.file_size
+		, x.width
+		, x.height
+		, x.file_ext
+		, x.sell_yn
+		, x.excg_yn
+		, x.del_yn
+		, x.reg_id
+		, x.reg_name
+		, x.reg_date
+		, x.mod_id
+		, x.mod_name
+		, x.mod_date
+		from (select
+		no_cate
+		, cate_name
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, sell_yn
+		, excg_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_category) x
+		where 1=1
+		<include refid="cateListSelect" />
+		ORDER BY ${order_column} ${order_type}
+		limit #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="getCateListCnt" parameterType="kr.co.msync.web.module.cate.model.req.CateReqVO" resultType="int">
+		select
+		count(*) cnt
+		from (select
+		no_cate
+		, cate_name
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, sell_yn
+		, excg_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		, mod_id
+		, mod_name
+		, mod_date
+		from tb_category) x
+		where 1=1
+		<include refid="cateListSelect" />
+	</select>
+
+	<select id="getCateInfo" parameterType="kr.co.msync.web.module.cate.model.req.CateReqVO" resultType="kr.co.msync.web.module.cate.model.res.CateResVO">
+		select
+			  no_cate
+			, cate_name
+			, file_path
+			, origin_name
+			, save_name
+			, file_size
+			, width
+			, height
+			, file_ext
+			, sell_yn
+			, excg_yn
+			, del_yn
+			, reg_id
+			, reg_name
+			, reg_date
+			, mod_id
+			, mod_name
+			, mod_date
+		from tb_category
+		WHERE no_cate = #{no_cate}
+	</select>
+
+	<update id="cateRegAction" parameterType="kr.co.msync.web.module.cate.model.req.CateReqVO">
+		insert into tb_category (
+		no_cate
+		, cate_name
+		, file_path
+		, origin_name
+		, save_name
+		, file_size
+		, width
+		, height
+		, file_ext
+		, sell_yn
+		, excg_yn
+		, del_yn
+		, reg_id
+		, reg_name
+		, reg_date
+		) values (
+		#{no_cate, jdbcType=VARCHAR}
+		, #{cate_name, jdbcType=VARCHAR}
+		, #{file_path, jdbcType=VARCHAR}
+		, #{origin_name, jdbcType=VARCHAR}
+		, #{save_name, jdbcType=VARCHAR}
+		, #{file_size, jdbcType=VARCHAR}
+		, #{width, jdbcType=VARCHAR}
+		, #{height, jdbcType=VARCHAR}
+		, #{file_ext, jdbcType=VARCHAR}
+		, #{sell_yn, jdbcType=VARCHAR}
+		, #{excg_yn, jdbcType=VARCHAR}
+		, #{del_yn, jdbcType=VARCHAR}
+		, #{reg_id, jdbcType=VARCHAR}
+		, #{reg_name, jdbcType=VARCHAR}
+		, #{reg_date, jdbcType=VARCHAR}
+		)
+	</update>
+
+	<update id="cateModAction" parameterType="kr.co.msync.web.module.cate.model.req.CateReqVO">
+		update tb_category set
+			cate_name = #{cate_name, jdbcType=VARCHAR}
+		  , sell_yn = #{sell_yn, jdbcType=VARCHAR}
+		  , excg_yn = #{excg_yn, jdbcType=VARCHAR}
+		  , mod_id = #{mod_id, jdbcType=VARCHAR}
+		  , mod_name = #{mod_name, jdbcType=VARCHAR}
+		  , mod_date = #{mod_date, jdbcType=VARCHAR}
+		  <include refid="cateFileUpdate" />
+		where no_cate = #{no_cate, jdbcType=VARCHAR}
+	</update>
+
+	<update id="cateDelAction" parameterType="kr.co.msync.web.module.cate.model.req.CateReqVO">
+		UPDATE tb_category SET DEL_YN = 'Y', MOD_ID = #{mod_id}, MOD_NAME = #{mod_name}, MOD_DATE = #{mod_date}
+		WHERE no_cate in <foreach collection="del_no_cate" item="no_cate" index="index" separator="," open="(" close=")">
+		#{no_cate}
+	</foreach>
+	</update>
+
+	<update id="sellDeviceMapDelAction" parameterType="kr.co.msync.web.module.cate.model.req.CateReqVO">
+		delete from tb_sell_device_map
+		WHERE no_cate in <foreach collection="del_no_cate" item="no_cate" index="index" separator="," open="(" close=")">
+		#{no_cate}
+	</foreach>
+	</update>
+	<select id="getDeviceSeq" parameterType="String" resultType="String">
+		select no_device from tb_device_master where no_cate = #{no_cate, jdbcType=VARCHAR}
+	</select>
+	<update id="deviceColorMapDelAction" parameterType="kr.co.msync.web.module.cate.model.req.CateReqVO">
+		delete from tb_device_color_map
+		WHERE no_device in <foreach collection="del_no_device" item="no_device" index="index" separator="," open="(" close=")">
+		#{no_device}
+	</foreach>
+	</update>
+	<update id="excgDeviceMapAction" parameterType="kr.co.msync.web.module.cate.model.req.CateReqVO">
+		delete from tb_excg_device_map
+		WHERE no_cate in <foreach collection="del_no_cate" item="no_cate" index="index" separator="," open="(" close=")">
+		#{no_cate}
+	</foreach>
+	</update>
+	<update id="deviceMasterDelAction" parameterType="kr.co.msync.web.module.cate.model.req.CateReqVO">
+		delete from tb_device_master
+		WHERE no_cate in <foreach collection="del_no_cate" item="no_cate" index="index" separator="," open="(" close=")">
+		#{no_cate}
+	</foreach>
+	</update>
+
+</mapper>

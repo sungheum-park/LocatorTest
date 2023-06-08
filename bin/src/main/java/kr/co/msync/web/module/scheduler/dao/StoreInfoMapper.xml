@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.scheduler.dao.StoreInfoMapper">
+
+	<select id="getStoreInfoList" resultType="kr.co.msync.web.module.scheduler.model.StoreInfoResVO" parameterType="String">
+        select
+            a.store_code, a.store_type, b.code_name as store_type_name, a.store_name, a.mod_date, getClosedDays(replace(replace(replace(replace(replace(replace(replace(a.closed_date,'월','0'),'화','1'),'수','2'),'목','3'),'금','4'),'토','5'),'일','6')) as closed_date
+            , a.latitude, a.longitude, a.oper_week_time, a.oper_time, a.as_time, a.tel_num, a.store_addr, ifnull(a.store_addr_dtl, '') as store_addr_dtl, a.treat_yn
+            , ifnull(concat(if(a.parking_yn = 'Y', '000,', ''), group_concat(distinct e.no_service order by e.no_service asc)), '') as service
+            , ifnull(group_concat(distinct e.service_name order by e.no_service asc separator ', '), '') as service_name
+            , ifnull(concat(if(a.treat_yn = 'Y', '0000000,', ''), group_concat(distinct f.no_cate)), '') as sell_device
+            , ifnull(group_concat(distinct g.no_device, ":", g.no_color, "(", g.no_cate, ")"), '') as excg_device
+            , @oper_time_now := substring_index(trim(replace(substring_index(a.oper_week_time, ',',dayofweek(now())),' ','')),',',-1) as oper_time_now
+            , if(length(@oper_time_now) > 11, concat(substr(@oper_time_now,1,5),'/',substr(@oper_time_now,13,5)), substr(@oper_time_now,1,5)) as oper_time_start
+            , if(length(@oper_time_now) > 11, concat(substr(@oper_time_now,7,5),'/',substr(@oper_time_now,19,5)), substr(@oper_time_now,7,5)) as oper_time_end
+            , a.del_yn as del_yn, a.store_status as store_status
+        from
+          tb_store_master a
+        inner join tb_com_code b
+        on
+          a.store_type = b.code_value
+        and
+          b.code_group = 'store_type'
+        left outer join
+        (
+            select
+              c.no_service as no_service, c.store_code as store_code, d.service_name as service_name
+            from
+              tb_store_service_map c left outer join tb_service d
+            on
+              c.no_service = d.no_service and d.use_yn = 'Y' and d.del_yn = 'N'
+            order by d.no_service
+        ) e
+        on
+          a.store_code = e.store_code
+        left outer join tb_sell_device_map f
+        on
+          a.store_code = f.store_code
+        left outer join tb_excg_device_map g
+        on
+          a.store_code = g.store_code
+        where
+        <if test="value==null or value.equals('')">
+          a.del_yn = 'N'
+        and
+          a.store_status in ('01','03')
+        </if>
+        <if test="value!=null and !value.equals('')">
+            a.reg_date >= #{value} or a.mod_date >= #{value}
+        </if>
+        group by
+          a.store_code
+	</select>
+
+	<update id="updateSyncDate" parameterType="String">
+		insert into tb_sync(sync_date) values (#{final_sync_date, jdbcType=VARCHAR})
+	</update>
+
+</mapper>

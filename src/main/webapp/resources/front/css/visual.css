@@ -1,0 +1,476 @@
+@charset "utf-8";
+
+/*
+ * File       : main.css
+ * Author     : m-sync (kimkyungran)
+ *
+ * SUMMARY:
+ * 1) 메인 비주얼
+ * 2) 비주얼 푸터 
+ */
+
+
+
+ /* 1) 메인 비주얼 */
+
+
+.inner1560 {
+    position:relative;
+    margin:auto;
+    max-width: 1560px;
+    padding-right: 42px;
+}
+.visual {
+    width: 100%;
+    background-color: #fff;
+}
+.visual .near_store {
+    margin-top: 24px;
+    margin-right: 66px;
+    text-align: right;
+}
+.visual .near_store a {
+    display: inline-block;
+    width: 210px;
+    height: 50px;
+    background: #fff;
+    border: 1px solid #9d8276;
+    text-align: center;
+}
+
+.visual .near_store a span {
+    padding-left: 25px;
+    color: #9d8276;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 48px;
+    background: url(../images/icon_focus.png) no-repeat left center;
+}
+
+.visual_wrap{
+    margin-top: 24px;
+    padding-left: 8px;
+    width: 100%;
+}
+
+.visual_left {
+    float:left;
+    width: 30%;    
+    max-width: 383px;
+}
+.visual_right {
+    position:relative;
+    float:right;
+    width: 70%;
+}
+.visual_wrap .visual_title p{
+    color:#9d8276;
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.05em;
+    line-height: 1em;
+}
+.img_wrap {
+    margin-top: 90px;
+}
+.img_wrap .main_image {
+    max-height: 424px;
+    text-align: center;
+}
+.img_wrap .main_image img {
+    max-width: 100%;
+}
+.visual_cnt .change_pdt_list {
+    display:inline-block;
+}
+
+.visual_cnt .change_pdt_list ul {
+    padding-bottom: 14px;
+}
+.visual_cnt .change_pdt_list li {
+    position:relative;
+    width:auto;
+    margin-right: 24px;
+}
+.visual_cnt .change_pdt_list li:last-child {
+    margin-right: 0 !important;
+}
+
+
+.visual_cnt .change_pdt_list li a, .visual_cnt .change_pdt_list li span {
+    color:#9d8276;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.05em;
+}
+.change_pdt_list li span.roboto {
+    letter-spacing: 0;
+}
+
+.visual_cnt .change_pdt_list li:after {
+    content:'';
+    position: absolute;
+    left: 0;
+    bottom: -11px;
+    width: 0;
+    height: 2px;
+    background-color: #152a40;
+    transition:width 0.5s ease-in-out;
+    -webkit-transition:width 0.5s ease-in-out;
+    -moz-transition:width 0.5s ease-in-out;
+    -ms-transition:width 0.5s ease-in-out;
+    -o-transition:width 0.5s ease-in-out;
+}
+.visual_cnt .change_pdt_list li.on:after {
+    width: 100%;
+}
+.visual_cnt .change_pdt_list li.on:first-child:after{
+    width: 100%;
+    transition: none;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+}
+.visual_cnt .change_pdt_list li:hover:after {
+    width: 100%;
+}
+.visual_cnt .change_pdt_list li.on a, .visual_cnt .change_pdt_list li.on span,.visual_cnt .change_pdt_list li:hover a,.visual_cnt .change_pdt_list li:hover span{
+    padding-bottom: 5px;
+    color: #152a40;
+    /* border-bottom: 2px solid #152a40; */
+}
+.roboto {
+    font-family: 'Roboto',sans-serif;
+    letter-spacing: 0;
+}
+
+.visual_pdt_wrap {
+    position:relative;    
+}
+.visual_slide_wrap {
+    position:relative;
+    /* height: 480px; */
+    padding: 0 66px;
+
+}
+.swiper_wrap {
+    width: 100%;
+    /* position:absolute;
+    top: 50%;
+    left: 50%;
+    height:100%;
+    transform:translate(-50%, -50%);
+    -webkit-transform:translate(-50%, -50%);
+    -moz-transform:translate(-50%, -50%);
+    -ms-transform:translate(-50%, -50%);
+    -o-transform:translate(-50%, -50%); */
+}
+.iqos_slider {
+    margin: 66px 0 0;
+    /* height: 100%; */
+    padding-bottom: 90px;
+}
+.visual_slide {
+    /* max-width: 288px; */
+}
+
+.visual_slide .pdt_thumb img {
+    max-width:100%;
+}
+.visual_slide .pdt_name {
+    margin-top: 42px;
+    text-align: center;
+}
+.visual_slide .pdt_name p, .visual_slide .pdt_name span {
+    font-size: 24px;
+    line-height: 1.4em;
+    letter-spacing: -0.05em;
+}
+.visual_slide .pdt_name span.roboto {
+    letter-spacing: 0;
+}
+
+.visual_scroll {
+    bottom:0 !important;
+    height: 3px !important;
+}
+.visual_scroll .swiper-scrollbar-drag {
+    /* height:3px !important; */
+    background-color:#152a40;
+}
+
+.multi .slide_arr_wrap {
+    display: none;
+}
+.multi .visual_scroll {
+    display: none;
+}
+.slide_arr_wrap {
+    position:absolute;
+    top: 0;
+    left:0;
+    width: 100%;
+    height: 60%;
+}
+.slide_arr {
+    position:absolute;
+    top:50%;
+    left:0;
+    width: 100%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+}
+.slide_arr .arr_left {
+    float:left;
+}
+.slide_arr .arr_right {
+    float:right;
+}
+
+
+/*****************************************************************************************************************************
+*
+*   1-1) 헤더 RWD : 1520PX
+*
+*****************************************************************************************************************************/
+
+@media screen and (max-width: 1560px){
+    
+    .inner1560{
+        padding: 0 20px;
+    } 
+}
+
+
+/*****************************************************************************************************************************
+*
+*   1-2) 헤더 RWD : 1200PX
+*
+*****************************************************************************************************************************/
+
+@media screen and (max-width: 1200px){
+
+    .visual_wrap{
+        margin-top: 24px;
+    }
+
+    .visual_left {
+        width: 35%;
+    }
+    .visual_right {
+        width: 65%;
+    }
+    .multi .slide_arr_wrap {
+        display: block;
+    }
+    .multi .visual_scroll {
+        display: block;
+    }
+}
+/*****************************************************************************************************************************
+*
+*   1-2) 헤더 RWD : 1024PX
+*
+*****************************************************************************************************************************/
+
+@media screen and (max-width: 1024px){
+
+    .visual .near_store {
+        margin-right: 0;
+    }
+    .visual .near_store a {
+        width: 100%;
+    }
+    .visual_left, .visual_right{
+        float: none;
+        width: 100%;
+        max-width:unset;
+        text-align: center;
+    }
+    .visual_wrap .visual_title p {
+        font-size: 24px;
+    }
+    .visual_left .img_wrap {
+        display: none;
+    }
+    .visual_pdt_wrap {
+        padding: 0;
+    }
+    .visual_right {
+        margin-top: 30px;
+    }
+    .visual_wrap {
+        margin-top: 45px;
+        padding-left: 0;
+    }
+    .visual_slide_wrap  {
+        padding: 0;
+    }
+    .swiper_wrap {
+        margin-top: 40px;
+    }
+    .slide_arr_wrap {
+        display: none !important;
+    }
+    .iqos_slider {
+        margin: 0;
+    }
+    .visual_slide .pdt_name {
+        margin-top: 15px;
+    }
+    .visual_cnt .change_pdt_list li a, .visual_cnt .change_pdt_list li span{
+        font-size: 15px;
+    }
+    .visual_slide .pdt_name p, .visual_slide .pdt_name span {
+        font-size: 15px;
+    }
+    .iqos_slider {
+        padding-bottom: 45px;
+    }
+    .visual_cnt .change_pdt_list li:after {
+        bottom: -8px;
+    }
+
+}
+
+
+
+/*****************************************************************************************************************************
+*
+*   1-2) 헤더 RWD : 480PX
+*
+*****************************************************************************************************************************/
+
+@media screen and (max-width: 640px){
+    
+    /* .visual_slide_wrap {
+        height: auto;
+        padding-bottom: 70%;
+    } */
+
+}
+
+
+
+/* 2) 비주얼 푸터 */
+
+.visual_footer {
+    margin-top: 90px;
+    padding: 42px 0 ;
+    background-color: #f7f7f7;
+    word-break: keep-all;
+}
+.visual_footer .ft_left  {
+    float: left;
+}
+.visual_footer .ft_left .footer_title h3{
+    color:#9b9b9b;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: -0.05em;
+    line-height: 1em;
+}
+.visual_footer .ft_right{
+    float: right;
+    text-align: right;
+} 
+.visual_footer .ft_left ul {
+    margin-top: 42px;
+}
+.visual_footer .ft_left li {
+    float: left;
+    margin-right: 60px;
+}
+.ft_left  li a,.ft_left li p,.ft_left li span {
+    color:#9b9b9b;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.05em;
+    line-height: 20px;
+}
+.ft_left li span.roboto {
+    letter-spacing: 0;
+}
+.ft_left li a {
+    font-weight: 500;
+}
+.visual_footer .ft_right {
+    margin-top: -5px;
+}
+.visual_footer .ft_right li{
+    display: inline-block;
+    margin-left: 16px;
+    width: 41px;
+}
+.visual_footer .ft_right img {
+    max-width: 100%;
+}
+
+.ft_right .copyright {
+    margin-top: 30px;
+}
+.ft_right .copyright h3 {
+    display:inline-block;
+    width: 83px;
+}
+.ft_right .copyright p {
+    margin-top: 10px;
+    color:#9b9b9b;
+    font-size: 12px;
+    font-family: 'Roboto',sans-serif;
+}
+
+
+
+
+
+/*****************************************************************************************************************************
+*
+*   2-2) 푸터 RWD : 1024PX
+*
+*****************************************************************************************************************************/
+
+@media screen and (max-width: 1024px){
+
+    
+    .visual_footer {
+        margin-top: 60px;
+        padding: 30px 0;
+    }
+    .visual_footer .ft_left .footer_title h3 {
+        width: 70%;
+        font-size: 15px;
+        line-height: 1.6em;
+    }
+    .visual_footer .ft_left li {
+        float: none;
+        margin-right: 0;
+        margin-bottom: 30px;
+    }
+    .ft_left li a, .ft_left li p {
+        line-height: 21px;
+    }
+    .visual_footer .ft_left,.visual_footer .ft_right {
+        float: none;
+        margin-top: 0;
+        text-align: left;
+    }
+    .visual_footer .ft_right li {
+        margin-left: 20px;
+        width: 34px;
+    }
+    .visual_footer .ft_right li:first-child {
+        margin-left: 0;
+    }
+    .ft_right .copyright {
+        margin-top: 45px;
+    }
+    .ft_right .copyright h3 {
+        width: 100px;
+    }
+}

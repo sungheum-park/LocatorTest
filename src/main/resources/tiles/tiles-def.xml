@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+
+	<!-- ====================================== -->
+	<!-- 			Admin Layout Definition	  	-->
+	<!-- ====================================== -->
+	<definition name="adminDefault" template="/WEB-INF/views/template/admin/defaultLayout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/template/admin/header.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/views/template/admin/footer.jsp"/>
+	</definition>
+	<definition name="adminEempty" template="/WEB-INF/views/template/admin/emptyLayout.jsp">
+	</definition>
+	<definition name="adminLogin" template="/WEB-INF/views/template/admin/loginLayout.jsp">
+	</definition>
+	<definition name="aModal" template="/WEB-INF/views/template/admin/modalLayout.jsp">
+	</definition>
+	<!-- ====================================== -->
+	<!-- 		    Admin Layout Mapping		-->
+	<!-- ====================================== -->
+	<definition name="/*/*.aDefault" extends = "adminDefault">
+		<put-attribute name="section" value="/WEB-INF/views/module/{1}/{2}.jsp"/>
+	</definition>
+	<definition name="/*/*/*.aDefault" extends = "adminDefault">
+		<put-attribute name="section" value="/WEB-INF/views/module/{1}/{2}/{3}.jsp"/>
+	</definition>
+
+	<definition name="/*/*.aEmpty" extends="adminEempty">
+		<put-attribute name="page" value="/WEB-INF/views/module/{1}/{2}.jsp" />
+	</definition>
+
+	<definition name="/*/*/*.aEmpty" extends="adminEempty">
+		<put-attribute name="page" value="/WEB-INF/views/module/{1}/{2}/{3}.jsp" />
+	</definition>
+
+	<definition name="/*/*.aLogin" extends="adminLogin">
+		<put-attribute name="login" value="/WEB-INF/views/module/{1}/{2}.jsp" />
+	</definition>
+
+	<definition name="/*/*/*.aLogin" extends="adminLogin">
+		<put-attribute name="login" value="/WEB-INF/views/module/{1}/{2}/{3}.jsp" />
+	</definition>
+
+	<definition name="/*/*.aModal" extends="aModal">
+		<put-attribute name="modal" value="/WEB-INF/views/module/{1}/{2}.jsp" />
+	</definition>
+
+	<definition name="/*/*/*.aModal" extends="aModal">
+		<put-attribute name="modal" value="/WEB-INF/views/module/{1}/{2}/{3}.jsp" />
+	</definition>
+
+
+	<!-- ====================================== -->
+	<!-- 			Layout Definition	  		-->
+	<!-- ====================================== -->
+
+	<definition name="storeLocator" template="/WEB-INF/views/template/storeLocatorLayout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/template/header.jsp"/>
+	</definition>
+
+	<definition name="default" template="/WEB-INF/views/template/defaultLayout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/template/header.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/views/template/footer.jsp"/>
+	</definition>
+
+	<definition name="main" template="/WEB-INF/views/template/mainLayout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/template/header.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/views/template/footer.jsp"/>
+	</definition>
+
+	<definition name="empty" template="/WEB-INF/views/template/emptyLayout.jsp">
+	</definition>
+
+	<!-- ====================================== -->
+	<!-- 		     Layout Mapping		  		-->
+	<!-- ====================================== -->
+	<definition name="/*/*.storeLocator" extends="storeLocator">
+		<put-attribute name="content" value="/WEB-INF/views/module/{1}/{2}.jsp"/>
+		<put-attribute name="module" value="/WEB-INF/views/module/{1}/{2}Js.jsp"/>
+	</definition>
+
+	<definition name="/*/*.default" extends="default">
+		<put-attribute name="meta" value="/WEB-INF/views/module/{1}/{2}Meta.jsp"/>
+		<put-attribute name="content" value="/WEB-INF/views/module/{1}/{2}.jsp"/>
+	</definition>
+
+	<!--  main  service  -->
+	<definition name="/*/*.main" extends = "main">
+		<put-attribute name="content" value="/WEB-INF/views/module/{1}/{2}.jsp"/>
+	</definition>
+
+	<definition name="/*/*.empty" extends="empty">
+		<put-attribute name="page" value="/WEB-INF/views/module/{1}/{2}.jsp" />
+	</definition>
+
+</tiles-definitions>

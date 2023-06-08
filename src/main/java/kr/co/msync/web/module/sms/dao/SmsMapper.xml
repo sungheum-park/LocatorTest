@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.sms.dao.SmsMapper">
+	<select id="getSmsSendCount" parameterType="kr.co.msync.web.module.sms.model.SmsVO" resultType="int">
+		select count(*) from tb_sms_ip where ip_addr = #{ip_addr}
+	</select>
+
+	<insert id="smsIpRegAction" parameterType="kr.co.msync.web.module.sms.model.SmsVO">
+		insert into tb_sms_ip(ip_addr)  values(#{ip_addr})
+	</insert>
+
+	<insert id="smsReqUidRegAction" parameterType="kr.co.msync.web.module.sms.model.SmsDanalVO">
+		insert into tb_sms_log(req_uid) values(#{reqUid})
+	</insert>
+
+	<select id="getSmsAllowIpCheck" parameterType="kr.co.msync.web.module.sms.model.SmsVO" resultType="int">
+		select count(*)
+		from tb_sms_allow_ip
+		where ip_addr = #{ip_addr} and use_yn = 'Y'
+	</select>
+</mapper>

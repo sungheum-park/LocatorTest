@@ -1,0 +1,313 @@
+@charset "utf-8";
+
+/*
+ * File       : selfCheck.css
+ * Author     : m-sync (baeyoungseop)
+ *
+ * SUMMARY:
+ * 1) 자가진단
+ *
+ */
+
+
+
+.online_self_check {
+    padding: 70px 0;
+}
+.self_check_text {
+    margin-top: 110px;
+}
+.self_check_text .default_des {
+    margin-top: 30px;
+}
+
+
+.register_section {
+    text-align: center;
+    padding: 40px 0 60px;
+    background: #f7f7f7;
+}
+.register_section .sub_title {
+    padding-top: 50px;
+    background: url(../images/self_check/icon_notice.gif) no-repeat center top;
+    background-size: 38px;
+}
+.register_section .btn_register_toggle {
+    margin-top: 40px;
+}
+.register_section .btn_register_toggle a {
+    font-size: 18px;
+    display: inline-block;
+    padding-right: 24px;
+    background: url(../images/self_check/arrow_down.png) right top 8px no-repeat;
+    background-size: 18px;
+    border-bottom: 3px solid #152a40;
+    padding-bottom: 3px;
+}
+.register_section .btn_register_toggle a.on {
+    background-image: url(../images/self_check/arrow_up.png);
+}
+
+.register_way {
+    margin-top: 110px;
+}
+.way .care_title p {
+    font-size: 36px;
+    font-weight: bold;
+}
+.register_way .care_title {
+    margin-bottom: 60px;
+}
+.register_way .register_steps {
+    margin-top: 40px;   
+}
+.register_way .regi_step {
+    display: flex;
+    align-items: center;
+    margin-bottom: 110px;
+}
+.register_way .regi_step .regi_img > img {
+    display: inline-block;
+    max-width: 100%;
+}
+.register_way .regi_step.step_01 img {
+    margin-left: 40px;
+}
+.register_way .regi_step .regi_img {
+    width: 440px;
+}
+.register_way .regi_step .regi_txt {
+    flex: 1;
+    text-align: left;
+}
+
+.step_inner .step_title h4 {
+    font-size: 24px;
+    font-weight: 500;
+}
+.step_inner .step_title h4 span {
+    font-size: inherit;
+    display: inline-block;
+    margin-right: 7px;
+    vertical-align: baseline;
+}
+.step_inner .step_title p {
+    font-size: 18px;
+    margin-top: 15px;
+}
+
+.check_code .care_des {
+    margin-top: 20px;
+}
+.check_code .care_des p {
+    line-height: 1.7em;
+}
+.check_code .code_img_wrap {
+    margin-top: 40px;
+    font-size: 0;
+}
+.check_code .code_img_wrap ._img_wrap {
+    display: inline-block;
+    width: calc(50% - 12px);
+    margin-bottom: 24px;
+}
+.check_code .code_img_wrap ._img_wrap:nth-child(2n) {
+    margin-left: 24px;
+}
+
+.care_plus_info {
+    margin-top: 100px;
+}
+.care_con .care_title p {
+    font-size: 36px;
+    font-weight: bold;
+}
+.care_con .care_title p span {
+    font-size: inherit;
+    vertical-align: baseline;
+    color: #23a5dc;
+}
+.care_con .care_des {
+    margin-top: 10px;
+}
+.care_con .care_des p {
+    font-size: 18px;
+}
+.care_con .care_des p span {
+    font-size: inherit;
+    vertical-align: baseline;
+    margin-right: 10px;
+}
+
+.way {
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+}
+.way .btn_register_toggle {
+    padding-bottom: 30px;
+}
+
+
+.self_check_method {
+    margin-top: 110px;
+    overflow: hidden;
+}
+.self_check_method .step_list {
+    display: flex;
+    flex-flow: row wrap;
+    margin-top: 50px;
+    margin-left: -12px;
+    margin-right: -12px;
+}
+.self_check_method .step_list .step {
+    width: calc(50% - 24px);
+    margin: 0 12px 80px;
+}
+.self_check_method .step_inner .step_title h4 span {
+    margin-right: 20px;
+}
+.self_check_method .step_inner .step_title h4 em {
+    font-size: inherit;
+    vertical-align: baseline;
+    letter-spacing: 0;
+}
+.self_check_method .step_inner .step_text {
+    margin-top: 40px;
+}
+.btn_self_check_start a {
+    display: block;
+    width: 240px;
+    background: #152a40;
+    text-align: center;
+    margin: 0 auto;
+}
+.btn_self_check_start a span {
+    font-size: 18px;
+    color: #fff;
+    line-height: 70px;
+    padding-right: 20px;
+    background: url(../images/icon_arrow_right_white.png) no-repeat right center;
+    background-size: 14px;
+}
+
+
+.cs_center {
+    margin-top: 110px;
+}
+.cs_center .btn_self_check_start {
+    margin-top: 40px;
+    display: none;
+}
+.cs_center .btn_self_check_start a {
+    background: #9d8276;
+}
+.cs_center .btn_self_check_start a span {
+    background-image: url(../images/self_check/call_cs_center.png);
+    background-size: 19px;
+    padding-right: 28px;
+    background-position: right center;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .self_check_text {
+        margin-top: 60px;
+    }
+    .self_check_text .default_des {
+        margin-top: 15px;
+    }
+    .cs_center .self_check_text .default_des {
+        margin-top: 30px;
+    }
+    .online_self_check {
+        padding: 45px 0 25px;
+    }
+    .register_section {
+        padding: 40px 0 60px;
+    }
+    .self_check_method .step_list {
+        margin-top: 30px;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .self_check_method .step_list .step {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 70px;
+    }
+    .self_check_method .step_list .step ._img_wrap {
+        width: calc(100% + 40px);
+        margin-left: -20px;
+    }
+    .self_check_method .step_inner .step_title h4 span {
+        margin-right: 10px;
+    }
+    .step_inner .step_title h4 {
+        font-size: 20px;
+    }
+    .step_inner .step_title p {
+        font-size: 14px;
+    }
+    .self_check_method .step_inner .step_text {
+        margin-top: 24px;
+    }
+
+    .btn_self_check_start a {
+        width: 180px;
+    }
+    .btn_self_check_start a span {
+        line-height: 50px;
+        font-size: 14px;
+        background-size: 12px;
+        background-position: right top 2px;
+    }
+    
+    .register_section .btn_register_toggle {
+        margin-top: 20px;
+    }
+    .register_section .btn_register_toggle a {
+        font-size: 15px;
+        background-size: 15px;
+        padding-right: 22px;
+        background-position: right top 6px;
+    }
+    .register_way .care_title p {
+        font-size: 20px;
+        text-align: left;
+    }
+    .register_way .register_steps {
+        margin-top: 25px;
+    }
+    .register_way .regi_step {
+        flex-flow: column;
+        text-align: center;
+        margin-bottom: 90px;
+    }
+    .register_way .regi_step .regi_img {
+        width: 100%;
+        max-width: 180px;
+    }
+    .register_way .regi_step.step_01 img {
+        margin-left: 20px;
+        max-width: calc(100% - 20px);
+    }
+
+    .cs_center .btn_self_check_start {
+        display: block;
+    }
+
+    .way .care_title p {
+        font-size: 24px;
+        text-align: center;
+    }
+    .check_code .care_des p {
+        font-size: 14px;
+    }
+    .self_check_method {
+        margin-top: 60px;
+    }
+}

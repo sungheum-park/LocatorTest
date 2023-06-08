@@ -1,0 +1,13 @@
+<svg id="floating_btn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="54" viewBox="0 0 54 54">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="사각형_296" data-name="사각형 296" width="25.521" height="24" fill="#00d1d2"/>
+    </clipPath>
+  </defs>
+  <circle id="타원_4" data-name="타원 4" cx="27" cy="27" r="27" fill="#34303d"/>
+  <g id="그룹_281" data-name="그룹 281" transform="translate(14.24 15)">
+    <g id="그룹_280" data-name="그룹 280" clip-path="url(#clip-path)">
+      <path id="패스_6" data-name="패스 6" d="M12.759,23.054a9.424,9.424,0,1,1,6.667-2.759,9.4,9.4,0,0,1-6.667,2.759m6.2-19.477a7.158,7.158,0,0,0-12.4,0L.97,13.266A7.156,7.156,0,0,0,7.167,24H18.354a7.156,7.156,0,0,0,6.2-10.734Z" transform="translate(0)" fill="#00d1d2"/>
+    </g>
+  </g>
+</svg>

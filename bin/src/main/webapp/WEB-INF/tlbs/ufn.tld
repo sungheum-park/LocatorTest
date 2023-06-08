@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd" version="2.0">
+
+	<description>JSTL 1.1 functions library</description>
+	<display-name>JSTL User functions</display-name>
+	<tlib-version>1.1</tlib-version>
+	<short-name>ufn</short-name>
+	<uri>http://java.sun.com/jsp/jstl/function</uri>
+
+	<function>
+		<description>
+			Get Code's Name by Code's Values
+		</description>
+		<name>getCodeName</name>
+		<function-class>kr.co.msync.web.module.util.JSTLFunction</function-class>
+		<function-signature>java.lang.String getCodeName(java.lang.String, java.lang.String)</function-signature>
+		<example>
+			${ufn:getCodeName('code_group', 'code_value')}
+		</example>
+	</function>
+
+	<function>
+		<description>
+			Get Code's Name by Code's Values
+		</description>
+		<name>getCodeNameArr</name>
+		<function-class>kr.co.msync.web.module.util.JSTLFunction</function-class>
+		<function-signature>java.lang.String getCodeNameArr(java.lang.String, java.lang.String)</function-signature>
+		<example>
+			${ufn:getCodeNameArr('code_group', 'code_value')}
+		</example>
+	</function>
+
+	<function>
+		<description>
+			Get Select Box by Code Group
+		</description>
+		<name>getSelectBox</name>
+		<function-class>kr.co.msync.web.module.util.JSTLFunction</function-class>
+		<function-signature>java.lang.String getSelectBox(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.String)</function-signature>
+		<example>
+			${ufn:getSelectBox('code_group', 'yn_use', 'input_name', true, 'code_value')}
+		</example>
+	</function>
+
+	<function>
+		<description>
+			Get Select Box by Code Group
+		</description>
+		<name>getStoreSelectBox</name>
+		<function-class>kr.co.msync.web.module.util.JSTLFunction</function-class>
+		<function-signature>java.lang.String getStoreSelectBox(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.String, java.lang.String)</function-signature>
+		<example>
+			${ufn:getSelectBox('code_group', 'yn_use', 'input_name', true, 'code_value', 'include_code')}
+		</example>
+	</function>
+
+	<function>
+		<description>
+			Get Radio Button by Code Group
+		</description>
+		<name>getRadioButton</name>
+		<function-class>kr.co.msync.web.module.util.JSTLFunction</function-class>
+		<function-signature>java.lang.String getRadioButton(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)</function-signature>
+		<example>
+			${ufn:getRadioButton('code_group', 'yn_use', 'input_name', 'code_value', 'exclude_code')}
+		</example>
+	</function>
+
+	<function>
+		<description>
+			Get CheckBox by Code Group
+		</description>
+		<name>getCheckBox</name>
+		<function-class>kr.co.msync.web.module.util.JSTLFunction</function-class>
+		<function-signature>java.lang.String getCheckBox(java.lang.String,java.lang.String,java.lang.String,java.lang.String)</function-signature>
+		<example>
+			${ufn:getCheckBox('code_group', 'yn_use', 'input_name', 'code_value')}
+		</example>
+	</function>
+
+	<function>
+		<description>
+			Select Box by Table
+		</description>
+		<name>getSelectByTable</name>
+		<function-class>kr.co.msync.web.module.util.JSTLFunction</function-class>
+		<function-signature>java.lang.String getSelectByTable(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.String)</function-signature>
+		<example>
+			${ufn:getSelectByTable('tableName', 'input_name', 'column_pk', 'column_name','del_yn', true, 'value')}
+		</example>
+	</function>
+
+</taglib>

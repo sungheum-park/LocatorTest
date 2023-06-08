@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.menu.dao.MenuMapper">
+
+	<select id="getMenuList" parameterType="kr.co.msync.web.module.menu.model.req.MenuReqVO" resultType="kr.co.msync.web.module.menu.model.res.MenuResVO">
+		SELECT *
+		  FROM tb_menu a right join tb_menu_grt b on a.no_menu = b.no_menu
+		  WHERE b.no_user = #{no_user, jdbcType=VARCHAR}
+			<if test="menu_level!=null and !menu_level.equals('')">
+				AND a.menu_level =  #{menu_level, jdbcType=VARCHAR}
+			</if>
+			ORDER BY ${order_column} ${order_type}
+	</select>
+
+	<select id="getMenuListCnt" parameterType="kr.co.msync.web.module.menu.model.req.MenuReqVO" resultType="int">
+		SELECT count(*)
+		FROM tb_menu a right join tb_menu_grt b on a.no_menu = b.no_menu
+		WHERE b.no_user = #{no_user, jdbcType=VARCHAR}
+		<if test="menu_level!=null and !menu_level.equals('')">
+			AND a.menu_level =  #{menu_level, jdbcType=VARCHAR}
+		</if>
+	</select>
+
+</mapper>

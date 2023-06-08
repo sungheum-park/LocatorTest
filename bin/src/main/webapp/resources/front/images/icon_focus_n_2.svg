@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="icon_target" transform="translate(-2262.591)">
+    <rect id="사각형_290" data-name="사각형 290" width="20" height="20" transform="translate(2262.591)" fill="none"/>
+    <g id="타원_3" data-name="타원 3" transform="translate(2265.5 3.5)" fill="none" stroke="#33303c" stroke-width="1">
+      <circle cx="6.5" cy="6.5" r="6.5" stroke="none"/>
+      <circle cx="6.5" cy="6.5" r="6" fill="none"/>
+    </g>
+    <rect id="사각형_7" data-name="사각형 7" width="1" height="4" transform="translate(2271.5 1.5)" fill="#33303c"/>
+    <rect id="사각형_7_복사_2" data-name="사각형 7 복사 2" width="1" height="4" transform="translate(2271.5 14.5)" fill="#33303c"/>
+    <rect id="사각형_7_복사_3" data-name="사각형 7 복사 3" width="4" height="1" transform="translate(2276.5 9.5)" fill="#33303c"/>
+    <rect id="사각형_7_복사_3-2" data-name="사각형 7 복사 3" width="4" height="1" transform="translate(2263.5 9.5)" fill="#33303c"/>
+  </g>
+</svg>

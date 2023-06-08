@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.msync.web.module.main.dao.MainMapper">
+	<select id="getRegionList" parameterType="kr.co.msync.web.module.main.model.RegionVO" resultType="kr.co.msync.web.module.main.model.RegionVO">
+		select
+			no_region, region_level, region_p_no, region_name
+		from
+			tb_region
+		<where>
+			<if test="no_region != null and no_region != ''">
+				no_region = #{no_region}
+			</if>
+			<if test="region_level != null and region_level != ''">
+				and region_level = #{region_level}
+			</if>
+			<if test="region_p_no != null and region_p_no != ''">
+				and region_p_no = #{region_p_no}
+			</if>
+		</where>
+		order by no_region asc
+	</select>
+
+	<select id="getServiceAll" parameterType="kr.co.msync.web.module.main.model.ServiceVO" resultType="kr.co.msync.web.module.main.model.ServiceVO">
+		select
+			no_service, service_div, service_name
+			, file_path, origin_name, save_name
+			, file_size, width, height
+			, file_ext, use_yn, reg_id
+			, reg_name, reg_date, mod_id
+			, mod_name, mod_date
+		from
+			tb_service
+		where
+			service_name not in ('A/S 교환')
+		and
+			use_yn = 'Y'
+		and
+			del_yn = 'N'
+	</select>
+	
+	<select id="getCategoryList" parameterType="kr.co.msync.web.module.main.model.CategoryVO" resultType="kr.co.msync.web.module.main.model.CategoryVO">
+		select
+			no_cate, cate_name, file_path, save_name, width
+			, height, sell_yn, excg_yn, del_yn
+		from
+			tb_category
+		<where>
+			<if test="no_cate != null and no_cate != ''">
+				no_cate = #{no_cate}
+			</if>
+			<if test="sell_yn != null and sell_yn != ''">
+				and sell_yn = #{sell_yn}
+			</if>
+			<if test="excg_yn != null and excg_yn != ''">
+				and excg_yn = #{excg_yn}
+			</if>
+			and
+				del_yn = 'N'
+		</where>
+		order by reg_date desc
+	</select>
+
+	<select id="getDeviceList" parameterType="kr.co.msync.web.module.main.model.DeviceVO" resultType="kr.co.msync.web.module.main.model.DeviceVO">
+		select
+			no_device, no_cate, device_name, file_path
+			, save_name, width, height
+		from
+			tb_device_master
+		<where>
+			<if test="no_cate != null and no_cate !=''">
+				no_cate = #{no_cate}
+			</if>
+			and
+				use_yn = 'Y'
+			and
+				del_yn = 'N'
+		</where>
+	</select>
+
+	<select id="getDeviceColorList" parameterType="kr.co.msync.web.module.main.model.DeviceVO" resultType="kr.co.msync.web.module.main.model.DeviceColorVO">
+		select
+			a.no_color as no_color, a.color_name as color_name
+			, a.color_rgb as color_rgb, a.color_sno as color_sno
+			, b.no_device as no_device, ifnull(b.limit_yn, '01') as limit_yn
+	  	from
+			tb_device_color a, tb_device_color_map b
+		<where>
+			a.no_color = b.no_color
+			<if test="no_device != null and no_device != ''">
+				and b.no_device = #{no_device}
+			</if>
+			and
+				a.use_yn = 'Y'
+			and
+				a.del_yn = 'N'
+			order by a.color_sno asc;
+		</where>
+	</select>
+
+
+	<select id="getStoreListByKeyword" parameterType="String" resultType="kr.co.msync.web.module.main.model.StoreMasterVO">
+		select
+			a.store_code, a.store_type, a.store_name, a.store_addr, a.store_addr_dtl
+			, a.latitude, a.longitude, a.come_way, a.tel_num, a.closed_date
+			, a.oper_week_time, a.oper_time, a.as_time, a.parking_yn
+			, a.treat_yn, a.cust_desc, a.notice, a.del_yn
+-- 			, concat(a.store_name, '(', b.code_name, ')')  as title
+			, a.store_name as title
+			, a.store_addr as subtitle
+		from
+			tb_store_master a inner join tb_com_code b
+		on(
+			b.code_group = 'store_type' and a.store_type = b.code_value
+		)
+		where
+		(
+			a.store_name like concat('%', #{keyword}, '%')
+		or
+			a.store_addr like concat('%', #{keyword}, '%')
+		)
+		and
+			a.del_yn = 'N'
+		order by store_type asc
+	</select>
+
+	<select id="getStoreListByRegion" parameterType="kr.co.msync.web.module.main.model.SearchVO" resultType="kr.co.msync.web.module.main.model.StoreMasterVO">
+		select
+			a.store_code, a.store_type, a.store_name, a.store_addr, a.store_addr_dtl
+			, a.latitude, a.longitude, a.come_way, a.tel_num, a.closed_date
+			, a.oper_week_time, a.oper_time, a.as_time, a.parking_yn
+			, a.treat_yn, a.cust_desc, a.notice, a.del_yn, b.code_name as store_type_name
+		from
+			tb_store_master a inner join tb_com_code b
+		on(
+			b.code_group = 'store_type' and a.store_type = b.code_value
+		)
+		where
+			a.store_addr like concat('%', #{regionDepth1}, '%')
+		and
+			a.store_addr like concat('%', #{regionDepth2}, '%')
+		and
+			a.del_yn = 'N'
+		order by store_type asc
+	</select>
+
+	<select id="getStoreDetailByStoreCode" parameterType="kr.co.msync.web.module.main.model.StoreDetailVO" resultType="kr.co.msync.web.module.main.model.StoreDetailVO">
+		select
+			a.store_code, a.store_type, b.code_name as store_type_name, a.store_name, a.store_addr
+			, a.store_addr_dtl, a.latitude, a.longitude, a.come_way, a.tel_num
+			, getClosedDays(replace(replace(replace(replace(replace(replace(replace(a.closed_date,'월','0'),'화','1'),'수','2'),'목','3'),'금','4'),'토','5'),'일','6')) as closed_date, a.oper_week_time, a.oper_time, a.as_time
+			, a.parking_yn, a.treat_yn, a.cust_desc, a.notice, a.store_status
+			, a.store_due_date, a.del_yn
+            , @oper_time_now := substring_index(trim(replace(substring_index(a.oper_week_time, ',',dayofweek(now())),' ','')),',',-1) as oper_time_now
+            , if(length(@oper_time_now) > 11, concat(substr(@oper_time_now,1,5),'/',substr(@oper_time_now,13,5)), substr(@oper_time_now,1,5)) as oper_time_start
+            , if(length(@oper_time_now) > 11, concat(substr(@oper_time_now,7,5),'/',substr(@oper_time_now,19,5)), substr(@oper_time_now,7,5)) as oper_time_end
+		from
+			tb_store_master a inner join tb_com_code b
+		on(
+			b.code_group = 'store_type' and a.store_type = b.code_value
+		)
+		where
+			a.store_code = #{store_code}
+		and
+			a.del_yn = 'N'
+	</select>
+
+	<select id="getStorePhotoByStoreCode" parameterType="kr.co.msync.web.module.main.model.StoreDetailVO" resultType="kr.co.msync.web.module.main.model.StorePhoto">
+		select
+			no_file, store_code, file_path, origin_name
+			, save_name, file_size, width, height, file_ext, file_sno
+		from
+			tb_store_photo
+		where
+			store_code = #{store_code}
+		order by file_sno asc
+	</select>
+
+
+	<select id="getStoreServiceByStoreCode" parameterType="kr.co.msync.web.module.main.model.StoreDetailVO" resultType="kr.co.msync.web.module.main.model.ServiceVO">
+		select
+			b.no_service, b.service_div, b.service_name
+			, b.file_path, b.origin_name, b.save_name
+			, b.file_size, b.width, b.height, b.file_ext
+		from
+			tb_store_service_map a inner join tb_service b
+		on
+			a.no_service = b.no_service
+		where
+			a.store_code = #{store_code}
+		and
+			b.use_yn = 'Y'
+		and
+			b.del_yn = 'N'
+		order by a.no_service
+	</select>
+
+	<select id="getStoreSellDeviceList" parameterType="kr.co.msync.web.module.main.model.StoreDetailVO" resultType="kr.co.msync.web.module.main.model.CategoryVO">
+		select
+			a.no_cate, a.cate_name, a.file_path, a.save_name, a.width
+			, a.height, a.sell_yn, a.excg_yn, b.cate_sno, b.device_qty
+		from
+			tb_category a inner join tb_sell_device_map b
+		on
+			a.no_cate = b.no_cate
+		where
+			b.store_code = #{store_code}
+		and
+			b.device_qty <![CDATA[>]]> 0
+		and
+			a.sell_yn = 'Y'
+		and
+			a.del_yn = 'N'
+		order by b.cate_sno asc
+	</select>
+
+	<select id="getStoreExcgDeviceList" parameterType="kr.co.msync.web.module.main.model.StoreDetailVO" resultType="java.util.Map">
+		select
+			d.*
+			, ifnull(e.no_color, '') as no_color, ifnull(e.color_sno, '') as color_sno, ifnull(e.file_path, '') as color_file_path, ifnull(e.save_name , '') as color_save_name, ifnull(e.width , '') as color_width, ifnull(e.height , '') as color_height
+			, ifnull(f.color_name, '') as color_name, ifnull(f.color_rgb, '') as color_rgb, ifnull(f.color_sno , '') as color_sno_master, ifnull(e.limit_yn, '01') as limit_yn
+		from(
+			select
+				c.no_cate, c.cate_name, c.file_path as cate_file_path, c.save_name as cate_save_name, c.width as cate_width, c.height as cate_height, c.sell_yn, c.excg_yn
+				, b.no_device, b.device_name, b.file_path as device_file_path, b.save_name as device_save_name, b.width as device_width, b.height as device_height
+				,a.no_color, a.device_qty, c.reg_date
+			from
+				tb_excg_device_map a inner join tb_device_master b
+				on
+				a.no_device = b.no_device
+				inner join tb_category c
+				on
+				b.no_cate = c.no_cate
+			where
+				a.store_code = #{store_code}
+			and
+				b.use_yn = 'Y'
+			and
+				b.del_yn = 'N'
+			and
+				c.del_yn = 'N'
+			and
+				c.excg_yn = 'Y'
+		) d left outer join tb_device_color_map e
+		on
+			d.no_device = e.no_device
+		and
+			d.no_color = e.no_color
+		left outer join tb_device_color f
+		on
+			e.no_color = f.no_color
+		where
+			f.use_yn ='Y'
+		and
+			f.del_yn = 'N'
+		order by d.reg_date desc, device_name desc, color_sno asc
+	</select>
+
+	<select id="getStoreAll" resultType="kr.co.msync.web.module.main.model.StoreMasterVO">
+		select * from tb_store_master
+	</select>
+
+	<update id="updateStoreXY" parameterType="kr.co.msync.web.module.main.model.StoreMasterVO">
+		update tb_store_master set latitude = #{latitude}, longitude = #{longitude} where store_code = #{store_code}
+	</update>
+
+
+	<select id="getSurveyCount" parameterType="kr.co.msync.web.module.main.model.SurveyVO" resultType="int">
+		select count(*) from tb_survey where ip_addr = #{ip_addr}
+	</select>
+
+	<insert id="surveyRegAction" parameterType="kr.co.msync.web.module.main.model.SurveyVO">
+		insert into tb_survey(ip_addr, score, device_type, reg_date) values(#{ip_addr}, #{score}, #{device_type}, #{reg_date})
+	</insert>
+
+	<select id="getNotice" resultType="kr.co.msync.web.module.main.model.NoticeVO">
+		select
+			no_notice, notice_title, notice_div
+			, ifnull(notice_contents, '') as notice_contents, ifnull(file_path, '') as file_path, ifnull(save_name, '') as save_name
+			, width, height
+		from
+			tb_notice
+		where
+			display_time_start <![CDATA[<=]]> date_format(now(), '%Y%m%d%H%i')
+		and
+			display_time_end <![CDATA[>=]]> date_format(now(), '%Y%m%d%H%i')
+		and
+			display_yn = 'Y'
+		and
+			del_yn = 'N'
+		order by
+			no_notice
+	  	desc
+		limit 1
+	</select>
+
+</mapper>

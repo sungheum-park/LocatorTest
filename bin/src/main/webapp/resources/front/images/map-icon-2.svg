@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="위치_icon" data-name="위치 icon" transform="translate(-312 -693)">
+    <g id="타원_5" data-name="타원 5" transform="translate(312 693)" fill="none" stroke="#34303d" stroke-width="1">
+      <circle cx="10" cy="10" r="10" stroke="none"/>
+      <circle cx="10" cy="10" r="9.5" fill="none"/>
+    </g>
+    <line id="선_6" data-name="선 6" y2="3.529" transform="translate(322 693.588)" fill="none" stroke="#34303d" stroke-linecap="round" stroke-width="1"/>
+    <line id="선_7" data-name="선 7" y2="3.529" transform="translate(322 708.882)" fill="none" stroke="#34303d" stroke-linecap="round" stroke-width="1"/>
+    <line id="선_8" data-name="선 8" y2="3.529" transform="translate(330.824 703) rotate(90)" fill="none" stroke="#34303d" stroke-linecap="round" stroke-width="1"/>
+    <line id="선_9" data-name="선 9" y2="3.529" transform="translate(316.706 703) rotate(90)" fill="none" stroke="#34303d" stroke-linecap="round" stroke-width="1"/>
+    <circle id="타원_6" data-name="타원 6" cx="1" cy="1" r="1" transform="translate(321 702)" fill="#34303d"/>
+  </g>
+</svg>
