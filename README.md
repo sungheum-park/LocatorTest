@@ -1,0 +1,2 @@
+# LocatorTest
+StoreLocator test
