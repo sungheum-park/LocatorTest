@@ -544,7 +544,7 @@
                 <configuration>
                     <source>${java-version}</source>
                     <target>${java-version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             <plugin>
@@ -569,6 +569,11 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
+            <plugin>
+	        	<groupId>com.heroku.sdk</groupId>
+		        <artifactId>heroku-maven-plugin</artifactId>
+		        <version>3.0.7</version>
+	      	</plugin>
         </plugins>
 
         <!-- resources -->
