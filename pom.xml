@@ -534,7 +534,7 @@
     </dependencies>
 
     <build>
-        <!-- <finalName></finalName> -->
+        <finalName>LocatorTest</finalName>
 
         <!-- plugins -->
         <plugins>
