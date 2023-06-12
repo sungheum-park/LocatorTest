@@ -3,32 +3,44 @@
 <!-- 30초마다 설정 파일의 변경을 확인한다. 파일이 변경되면 다시 로딩한다 -->
 <configuration scan="true" scanPeriod="30 seconds">
 	<!--local-->
-	<!-- ================================== Console Appender ================================== -->
-	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+
+	<!-- log 파일 경로 -->
+	<property name="ROOT_LOG_HOME" value="/var/lib/tomcat/log"/>
+	<property name="MAIN_LOG_HOME" value="main"/>
+
+	<!-- ================================== Daily Rolling File Appender ================================== -->
+	<appender name="MAIN_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${ROOT_LOG_HOME}/${MAIN_LOG_HOME}/output.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 파일명 패턴 -->
+			<FileNamePattern>${ROOT_LOG_HOME}/${MAIN_LOG_HOME}/output.%d{yyyyMMdd}.log</FileNamePattern>
+			<!-- 총 파일 보관개수 -->
+			<maxHistory>30</maxHistory>
+			<!-- 총용량 -->
+			<totalSizeCap>10GB</totalSizeCap>
+		</rollingPolicy>
 		<encoder>
-			<pattern>%d [%thread] %-5level %-20.50logger{35} - %msg%n</pattern>
-			<immediateFlush>false</immediateFlush>
-			<outputPatternAsHeader>true</outputPatternAsHeader>
+			<pattern>%d %-5relative %-5level %logger{35} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
 	<!-- ================================== Logger Define ================================== -->
 	<!-- 프로젝트 -->
-	<logger name="kr.co.msync" level="DEBUG" additivity="true"/>
+	<logger name="kr.co.msync" level="TRACE" additivity="true"/>
 
 	<!-- springframework -->
-	<logger name="org.springframework" level="INFO" additivity="true"/>
+	<logger name="org.springframework" level="TRACE" additivity="true"/>
 
 	<!-- apache -->
 	<logger name="org.apache" level="OFF" additivity="false"/>
 
 	<!-- mybatis -->
-	<logger name="org.mybatis" level="DEBUG" additivity="true"/>
+	<logger name="org.mybatis" level="TRACE" additivity="true"/>
 
 	<!-- log4jdbc -->
 	<!-- SQL 줄바꿈 하려면 톰캣 [Open launch configuration]에 -Dlog4jdbc.dump.sql.maxlinelength=0 옵션 설정 -->
-	<logger name="jdbc.sqltiming" level="DEBUG" additivity="true"/>
-	<logger name="jdbc.resultsettable" level="INFO" additivity="true"/>
+	<logger name="jdbc.sqltiming" level="TRACE" additivity="true"/>
+	<logger name="jdbc.resultsettable" level="TRACE" additivity="true"/>
 	<logger name="jdbc.sqlonly" level="OFF" additivity="false"/>
 	<logger name="jdbc.audit" level="OFF" additivity="false"/>
 	<logger name="jdbc.resultset" level="OFF" additivity="false"/>
@@ -36,8 +48,8 @@
 	<logger name="log4jdbc.debug" level="OFF" additivity="false"/>
 
 	<!-- root -->
-	<root level="DEBUG">
-		<appender-ref ref="CONSOLE"/>
+	<root level="TRACE">
+		<appender-ref ref="MAIN_APPENDER"/>
 	</root>
 
 </configuration>
