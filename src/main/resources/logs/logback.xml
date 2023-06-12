@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 30초마다 설정 파일의 변경을 확인한다. 파일이 변경되면 다시 로딩한다 -->
+<configuration scan="true" scanPeriod="30 seconds">
+	<!--local-->
+	<!-- ================================== Console Appender ================================== -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d [%thread] %-5level %-20.50logger{35} - %msg%n</pattern>
+			<immediateFlush>false</immediateFlush>
+			<outputPatternAsHeader>true</outputPatternAsHeader>
+		</encoder>
+	</appender>
+
+	<!-- ================================== Logger Define ================================== -->
+	<!-- 프로젝트 -->
+	<logger name="kr.co.msync" level="DEBUG" additivity="true"/>
+
+	<!-- springframework -->
+	<logger name="org.springframework" level="INFO" additivity="true"/>
+
+	<!-- apache -->
+	<logger name="org.apache" level="OFF" additivity="false"/>
+
+	<!-- mybatis -->
+	<logger name="org.mybatis" level="DEBUG" additivity="true"/>
+
+	<!-- log4jdbc -->
+	<!-- SQL 줄바꿈 하려면 톰캣 [Open launch configuration]에 -Dlog4jdbc.dump.sql.maxlinelength=0 옵션 설정 -->
+	<logger name="jdbc.sqltiming" level="DEBUG" additivity="true"/>
+	<logger name="jdbc.resultsettable" level="INFO" additivity="true"/>
+	<logger name="jdbc.sqlonly" level="OFF" additivity="false"/>
+	<logger name="jdbc.audit" level="OFF" additivity="false"/>
+	<logger name="jdbc.resultset" level="OFF" additivity="false"/>
+	<logger name="jdbc.connection" level="OFF" additivity="false"/>
+	<logger name="log4jdbc.debug" level="OFF" additivity="false"/>
+
+	<!-- root -->
+	<root level="DEBUG">
+		<appender-ref ref="CONSOLE"/>
+	</root>
+
+</configuration>

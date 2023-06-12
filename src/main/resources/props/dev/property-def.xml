@@ -12,8 +12,7 @@
 
 	<!-- 프로젝트 기본정보 -->
 	<entry key="characterSet">UTF-8</entry>
-	<!-- <entry key="site.url">https://qa.iqossvc.kr</entry> -->
-	<entry key="site.url">https://dashboard.heroku.com</entry>
+	<entry key="site.url">https://qa.iqossvc.kr</entry>
 	<entry key="site.check.referer">x</entry>
 
 	<!-- 프로젝트 정적 리소스 기본 경로 -->
