@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -Dspring.profiles.active=production $JAVA_OPTS -jar "target/LocatorTest.jar"
+web: java -Dserver.port=$PORT -Dspring.profiles.active=dev $JAVA_OPTS -jar "target/LocatorTest.jar"
