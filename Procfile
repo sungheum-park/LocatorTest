@@ -1,1 +1,1 @@
-web: java -jar target/LocatorTest.war
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar build/libs/LocatorTest.jar

@@ -5,9 +5,9 @@
 <tiles-definitions>
 
 
-	<!-- ====================================== -->
-	<!-- 			Admin Layout Definition	  	-->
-	<!-- ====================================== -->
+	<!-- <!-- ====================================== -->
+				Admin Layout Definition	  	
+	======================================
 	<definition name="adminDefault" template="/WEB-INF/views/template/admin/defaultLayout.jsp">
 		<put-attribute name="header" value="/WEB-INF/views/template/admin/header.jsp"/>
 		<put-attribute name="footer" value="/WEB-INF/views/template/admin/footer.jsp"/>
@@ -18,9 +18,9 @@
 	</definition>
 	<definition name="aModal" template="/WEB-INF/views/template/admin/modalLayout.jsp">
 	</definition>
-	<!-- ====================================== -->
-	<!-- 		    Admin Layout Mapping		-->
-	<!-- ====================================== -->
+	======================================
+			    Admin Layout Mapping		
+	======================================
 	<definition name="/*/*.aDefault" extends = "adminDefault">
 		<put-attribute name="section" value="/WEB-INF/views/module/{1}/{2}.jsp"/>
 	</definition>
@@ -50,7 +50,7 @@
 
 	<definition name="/*/*/*.aModal" extends="aModal">
 		<put-attribute name="modal" value="/WEB-INF/views/module/{1}/{2}/{3}.jsp" />
-	</definition>
+	</definition> -->
 
 
 	<!-- ====================================== -->
